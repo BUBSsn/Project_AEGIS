@@ -1,0 +1,21 @@
+# AEGIS Behavioral & Quality Rules
+
+1. Language & Testing Standards:
+   - Target Runtime: Python 3.10+.
+   - Test Framework: `pytest` with parameterized fixtures and edge-case assertions.
+   - Strict type hints using standard library `typing`.
+
+2. Security Hardening Constraints:
+   - Zero tolerance for raw SQL string concatenation, f-strings, or tainted query variables (CWE-89).
+   - Prohibit hardcoded API keys, passwords, bearer tokens, or JWT secrets (CWE-798).
+     Secrets must use `os.getenv()`.
+   - Never use `eval()` or `exec()` for dynamic string evaluation (CWE-95).
+
+3. Actor-Critic Operational Loop:
+   - Step 1 (Actor): Generate test cases asserting both standard operational paths and
+     malicious injection payloads.
+   - Step 2 (Actor): Apply atomic code diffs to source files.
+   - Step 3 (Critic): Run the critic verification engine. If any test fails, invoke
+     `critic_engine.rollback_target()` and re-attempt.
+   - Maximum Actor-Critic retry iterations: 3.
+     On third consecutive failure, halt execution and emit a manual intervention notice.

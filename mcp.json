@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "aegis-engine": {
+      "command": "python",
+      "args": [
+        "core/mcp_server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "."
+      }
+    }
+  }
+}

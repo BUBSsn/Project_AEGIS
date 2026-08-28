@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "IBM-Bob-AEGIS-Engine",
+          "semanticVersion": "2.0.0",
+          "rules": [
+            {
+              "id": "CWE-89",
+              "name": "SQLInjection",
+              "shortDescription": {
+                "text": "Improper Neutralization of Special Elements used in an SQL Command."
+              }
+            },
+            {
+              "id": "CWE-798",
+              "name": "HardcodedCredential",
+              "shortDescription": {
+                "text": "Use of Hard-coded Credentials."
+              }
+            },
+            {
+              "id": "CWE-95",
+              "name": "DynamicCodeExecution",
+              "shortDescription": {
+                "text": "Improper Neutralization of Directives in Dynamically Evaluated Code."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hardcoded secret assigned to 'JWT_SECRET_KEY' (entropy: 3.87). Use os.getenv()."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/sample_service.py"
+                },
+                "region": {
+                  "startLine": 7
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-89",
+          "level": "error",
+          "message": {
+            "text": "Insecure SQL query construction detected in 'execute()'. Use parameterized queries."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/sample_service.py"
+                },
+                "region": {
+                  "startLine": 31
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-95",
+          "level": "error",
+          "message": {
+            "text": "Dangerous execution function 'eval()' used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/sample_service.py"
+                },
+                "region": {
+                  "startLine": 39
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

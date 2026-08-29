@@ -1,0 +1,118 @@
+{
+  "stages": [
+    {
+      "stageId": "TUTORIAL_PHASE_1",
+      "stageName": "Tutorial !! Addition & Subtraction",
+      "backgroundPath": "backgrounds/first.png",
+      "enemies": [
+        "ENEMY_MOB1"
+      ],
+      "dialogueEvent": "TUTORIAL_PHASE_1_INTRO",
+      "victoryDialogue": "TUTORIAL_PHASE_1_VICTORY",
+      "isTutorial": true,
+      "tutorialHeroes": [
+        "HERO_ADDITION",
+        "HERO_SUBTRACTION"
+      ]
+    },
+    {
+      "stageId": "TUTORIAL_PHASE_2",
+      "stageName": "Tutorial !! Enter Multiplication",
+      "backgroundPath": "backgrounds/first.png",
+      "enemies": [
+        "ENEMY_MOB2"
+      ],
+      "dialogueEvent": "TUTORIAL_PHASE_2_INTRO",
+      "victoryDialogue": "TUTORIAL_PHASE_2_VICTORY",
+      "isTutorial": true,
+      "tutorialHeroes": [
+        "HERO_ADDITION",
+        "HERO_SUBTRACTION",
+        "HERO_MULTIPLICATION"
+      ]
+    },
+    {
+      "stageId": "TUTORIAL_PHASE_3",
+      "stageName": "Tutorial !! Division Arrives",
+      "backgroundPath": "backgrounds/first.png",
+      "enemies": [
+        "ENEMY_MOB3"
+      ],
+      "dialogueEvent": "TUTORIAL_PHASE_3_INTRO",
+      "victoryDialogue": "TUTORIAL_PHASE_3_VICTORY",
+      "isTutorial": true,
+      "tutorialHeroes": [
+        "HERO_ADDITION",
+        "HERO_SUBTRACTION",
+        "HERO_MULTIPLICATION",
+        "HERO_DIVISION"
+      ]
+    },
+    {
+      "comment": "=== STAGE 1: The Classroom ===",
+      "stageId": "STAGE_1_WAVE_1",
+      "stageName": "Stage 1 | Wave 1",
+      "backgroundPath": "backgrounds/first.png",
+      "enemies": [
+        "ENEMY_MOB1"
+      ],
+      "dialogueEvent": "STAGE_1_INTRO"
+    },
+    {
+      "stageId": "STAGE_1_WAVE_2",
+      "stageName": "Stage 1 | Wave 2 | DANGER: Boss!",
+      "backgroundPath": "backgrounds/first.png",
+      "enemies": [
+        "ENEMY_BOSS1"
+      ],
+      "dialogueEvent": "STAGE_1_BOSS_INTRO",
+      "victoryDialogue": "STAGE_1_VICTORY"
+    },
+    {
+      "comment": "=== STAGE 2: The Archive ===",
+      "stageId": "STAGE_2_WAVE_1",
+      "stageName": "Stage 2 | Wave 1",
+      "backgroundPath": "backgrounds/bg_stage2.png",
+      "enemies": [
+        "ENEMY_MOB2",
+        "ENEMY_MOB4"
+      ],
+      "dialogueEvent": "STAGE_2_INTRO"
+    },
+    {
+      "stageId": "STAGE_2_WAVE_2",
+      "stageName": "Stage 2 | Wave 2 | DANGER: Boss!",
+      "backgroundPath": "backgrounds/bg_stage2.png",
+      "enemies": [
+        "ENEMY_MOB3",
+        "ENEMY_BOSS2"
+      ],
+      "dialogueEvent": "STAGE_2_BOSS_INTRO",
+      "victoryDialogue": "STAGE_2_VICTORY"
+    },
+    {
+      "comment": "=== STAGE 3: The Sanctum ===",
+      "stageId": "STAGE_3_WAVE_1",
+      "stageName": "Stage 3 | Wave 1",
+      "backgroundPath": "backgrounds/bg_stage3.png",
+      "enemies": [
+        "ENEMY_MOB1",
+        "ENEMY_MOB3",
+        "ENEMY_MOB5"
+      ],
+      "dialogueEvent": "STAGE_3_INTRO"
+    },
+    {
+      "stageId": "STAGE_3_WAVE_2",
+      "stageName": "Stage 3 | Wave 2 | DANGER: Final Boss!",
+      "backgroundPath": "backgrounds/bg_stage3.png",
+      "enemies": [
+        "ENEMY_MOB2",
+        "ENEMY_MOB4",
+        "ENEMY_BOSS3"
+      ],
+      "dialogueEvent": "STAGE_3_BOSS_INTRO",
+      "victoryDialogue": "STAGE_3_VICTORY"
+    }
+  ]
+}

@@ -73,6 +73,35 @@ _metric_card(col3, "Est. Time Saved (hrs)", "4.5")
 
 st.markdown("---")
 
+# ── Supported languages ───────────────────────────────────────────────────────
+st.markdown("**Detectable Languages**")
+st.markdown(
+    """
+    <style>
+    .lang-pill {
+        display: inline-block;
+        padding: 4px 12px;
+        margin: 0 6px 6px 0;
+        border-radius: 999px;
+        border: 1px solid rgba(130,130,130,0.35);
+        background-color: rgba(130,130,130,0.08);
+        font-size: 0.82rem;
+        font-weight: 500;
+    }
+    </style>
+    <div>
+        <span class="lang-pill">🐍 Python</span>
+        <span class="lang-pill">🗄️ SQL</span>
+        <span class="lang-pill">🐘 PHP</span>
+        <span class="lang-pill">☕ Java</span>
+        <span class="lang-pill">🟨 JavaScript / TypeScript</span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown("---")
+
 # ── Scan form ─────────────────────────────────────────────────────────────────
 with st.form("scan_form"):
     repo_url = st.text_input(

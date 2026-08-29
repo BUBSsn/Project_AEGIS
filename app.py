@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import shutil
 import subprocess
@@ -178,14 +179,12 @@ def _severity_emoji(severity: str) -> str:
 
 # ── Security-expert skill instructions (prepended to every Bob chat query) ────
 _SKILL_PREAMBLE = (
-    "You are a senior application security engineer answering a developer's "
-    "question about a specific code vulnerability. "
-    "Keep your answers concise, direct, and limited to 2-3 short paragraphs. "
-    "Avoid using jargon where possible, or clearly define it if necessary. "
-    "If proposing a code fix, always output the corrected code in a properly "
-    "formatted Markdown block. "
-    "Do not hallucinate file names or line numbers; refer strictly to the "
-    "context provided in the prompt."
+    "Answer the developer's question about the code vulnerability below. "
+    "Keep the answer concise (2-3 short paragraphs), avoid unnecessary jargon "
+    "or define it briefly if used, and if proposing a fix, put the corrected "
+    "code in a Markdown code block. "
+    "Use only the file names, line numbers, and details provided below — "
+    "do not invent any."
 )
 
 _PROPOSED_SOLUTIONS: dict = {
@@ -277,10 +276,12 @@ _PROPOSED_SOLUTIONS: dict = {
 
 
 def _proposed_solution(rule_id: str) -> str:
-    """Return a Markdown-formatted proposed fix for the given rule ID."""
+    """Return the static Markdown-formatted proposed fix for the given rule ID."""
     return _PROPOSED_SOLUTIONS.get(
         rule_id,
-        f"Review the flagged code and consult the [{rule_id} CWE entry](https://cwe.mitre.org/data/definitions/{rule_id.replace('CWE-', '')}.html) for remediation guidance.",
+        f"Review the flagged code and consult the [{rule_id} CWE entry]"
+        f"(https://cwe.mitre.org/data/definitions/{rule_id.replace('CWE-', '')}.html)"
+        f" for remediation guidance.",
     )
 
 
@@ -335,7 +336,41 @@ if SARIF_PATH.exists():
         if not rows:
             st.info("No vulnerabilities found in the last scan.")
         else:
-            # ── 1. Summary dataframe (quick overview, no horizontal scroll) ──
+            # ── 1. Filter panel ───────────────────────────────────────────────
+            all_severities = sorted({r["severity"].capitalize() for r in rows})
+            all_rule_ids   = sorted({r["rule_id"] for r in rows})
+
+            fc1, fc2, fc3 = st.columns(3)
+            with fc1:
+                sel_severities = st.multiselect(
+                    "Severity", options=all_severities, default=all_severities,
+                    key="filter_severity",
+                )
+            with fc2:
+                sel_rule_ids = st.multiselect(
+                    "Rule ID (CWE)", options=all_rule_ids, default=all_rule_ids,
+                    key="filter_rule_id",
+                )
+            with fc3:
+                file_search = st.text_input(
+                    "File search", placeholder="substring match…", key="filter_file",
+                )
+
+            filtered_rows = [
+                r for r in rows
+                if r["severity"].capitalize() in sel_severities
+                and r["rule_id"] in sel_rule_ids
+                and file_search.lower() in r["rel_path"].lower()
+            ]
+
+            # Sort: errors/critical first, then warnings, then notes/unknown
+            _SEVERITY_RANK = {"error": 0, "critical": 0, "warning": 1, "note": 2}
+            filtered_rows = sorted(
+                filtered_rows,
+                key=lambda r: _SEVERITY_RANK.get(r["severity"].lower(), 3),
+            )
+
+            # ── 2. Summary dataframe (quick overview, no horizontal scroll) ──
             summary_rows = [
                 {
                     "Sev": _severity_emoji(row["severity"]),
@@ -344,7 +379,7 @@ if SARIF_PATH.exists():
                     "File":     row["rel_path"],
                     "Line":     row["line"],
                 }
-                for row in rows
+                for row in filtered_rows
             ]
             st.dataframe(
                 summary_rows,
@@ -359,11 +394,36 @@ if SARIF_PATH.exists():
                 hide_index=True,
             )
 
-            st.markdown(f"**{len(rows)} finding{'s' if len(rows) != 1 else ''} — expand a card for detail and source context.**")
+            PAGE_SIZE = 20
+            total_pages = max(1, math.ceil(len(filtered_rows) / PAGE_SIZE))
+            st.session_state.setdefault("findings_page", 1)
+            st.session_state["findings_page"] = min(
+                st.session_state["findings_page"], total_pages
+            )
+            current_page = st.session_state["findings_page"]
+            start = (current_page - 1) * PAGE_SIZE
+            page_rows = filtered_rows[start : start + PAGE_SIZE]
+
+            if len(filtered_rows) != len(rows):
+                st.markdown(
+                    f"**Showing {min(start + PAGE_SIZE, len(filtered_rows))} of "
+                    f"{len(filtered_rows)} filtered findings "
+                    f"({len(rows)} total) — expand a card for detail and source context.**"
+                )
+            else:
+                st.markdown(
+                    f"**Showing {min(start + PAGE_SIZE, len(rows))} of "
+                    f"{len(rows)} finding{'s' if len(rows) != 1 else ''} — "
+                    f"expand a card for detail and source context.**"
+                )
             st.markdown("")
 
-            # ── 2. Per-finding expander cards ────────────────────────────────
-            for row in rows:
+            # ── 3. Per-finding expander cards (paginated) ─────────────────────
+            if not filtered_rows:
+                st.info("No findings match the current filters.")
+
+
+            for row in page_rows:
                 emoji   = _severity_emoji(row["severity"])
                 label   = f"{emoji} {row['rel_path']}  (Line {row['line']})"
                 ext     = Path(row["rel_path"]).suffix.lower()
@@ -388,9 +448,71 @@ if SARIF_PATH.exists():
                     else:
                         st.caption("_Source file not available for preview._")
 
-                    # Proposed solution
+                    # ── Proposed solution ─────────────────────────────────────
                     st.markdown("**Proposed solution**")
-                    st.markdown(_proposed_solution(row["rule_id"]))
+                    st.markdown(_proposed_solution(row["rule_id"]))  # instant dict lookup
+
+                    custom_key = (row["rel_path"], row["line"], row["rule_id"])
+                    existing_custom = st.session_state.get("custom_solutions", {}).get(custom_key)
+
+                    if existing_custom:
+                        st.markdown("**Customized fix:**")
+                        st.markdown(existing_custom)
+
+                    if _BOB_EXE and _BOB_API_KEY and not existing_custom:
+                        if st.button(
+                            "🔧 Generate customized solution",
+                            key=f"gen_custom_{row['rel_path']}_{row['line']}",
+                        ):
+                            fix_question = (
+                                f"Provide a concise, language-matched ({lang}) fix for the "
+                                f"{row['rule_id']} vulnerability below. Output a short "
+                                f"explanation followed by the corrected code in a Markdown "
+                                f"code block. Do not use generic Python examples if the "
+                                f"file is {lang}."
+                            )
+                            fix_context = (
+                                f"VULNERABILITY DETAILS:\n"
+                                f"- Rule ID: {row['rule_id']}\n"
+                                f"- File: {row['rel_path']}\n"
+                                f"- Line: {row['line']}\n"
+                                f"- Language: {lang}\n"
+                                f"- Source snippet:\n```{lang}\n{snippet or '(not available)'}\n```\n"
+                            )
+                            with st.spinner("Generating customized solution…"):
+                                try:
+                                    gen_result = subprocess.run(
+                                        [
+                                            _BOB_EXE, "run",
+                                            "--mode", "ask",
+                                            "--disable-mcp",
+                                            "--disable-subagents",
+                                            "--format", "json",
+                                            fix_question,   # positional arg = the question
+                                        ],
+                                        input=fix_context,  # stdin = grounding context only
+                                        capture_output=True,
+                                        text=True,
+                                        encoding="utf-8",
+                                        errors="replace",
+                                        timeout=60,
+                                        env={**os.environ, "BOBSHELL_API_KEY": _BOB_API_KEY},
+                                        cwd=str(Path(__file__).resolve().parent),
+                                    )
+                                    raw_gen = gen_result.stdout.strip()
+                                    if raw_gen:
+                                        try:
+                                            generated = json.loads(raw_gen).get("last_message") or raw_gen
+                                        except (json.JSONDecodeError, AttributeError):
+                                            generated = raw_gen
+                                    else:
+                                        generated = gen_result.stderr.strip() or _proposed_solution(row["rule_id"])
+                                except Exception:
+                                    # Bob unavailable or timed out — fall back to static entry
+                                    generated = _proposed_solution(row["rule_id"])
+
+                            st.session_state.setdefault("custom_solutions", {})[custom_key] = generated
+                            st.rerun()
 
                     # ── Chat with Bob ─────────────────────────────────────────
                     st.divider()
@@ -418,21 +540,41 @@ if SARIF_PATH.exists():
                             with st.chat_message(msg["role"]):
                                 st.markdown(msg["content"])
 
-                        # Hidden system context injected into every query.
-                        # Question leads so Bob answers it directly; persona
-                        # and vulnerability context follow as grounding.
-                        def _build_prompt(question: str) -> str:
+                        # CLI arg = the user's question; stdin = grounding context only.
+                        # Keeping them separate prevents Bob from treating context as the question.
+                        def _build_context(question: str) -> str:
+                            """Build stdin context: skill instructions + history + finding details."""
+                            history = st.session_state[chat_key]
+                            prior_turns = history[-6:]  # up to 3 pairs (user+assistant)
+                            history_block = ""
+                            if prior_turns:
+                                turn_lines = []
+                                for m in prior_turns:
+                                    role_label = "User" if m["role"] == "user" else "Bob"
+                                    # Truncate each turn to 300 chars — no re-sent snippets
+                                    turn_lines.append(f"{role_label}: {m['content'][:300]}")
+                                history_block = (
+                                    "PRIOR CONVERSATION (last 3 turns, truncated):\n"
+                                    + "\n".join(turn_lines)
+                                    + "\n\n"
+                                )
+                            custom_fix = st.session_state.get("custom_solutions", {}).get(
+                                (row["rel_path"], row["line"], row["rule_id"])
+                            )
+                            custom_block = (
+                                f"\nPREVIOUSLY GENERATED FIX:\n{custom_fix}\n"
+                                if custom_fix else ""
+                            )
                             return (
-                                f"{question}\n\n"
-                                f"---\n"
-                                f"CONTEXT (use this to ground your answer):\n"
                                 f"{_SKILL_PREAMBLE}\n\n"
+                                f"{history_block}"
                                 f"VULNERABILITY DETAILS:\n"
                                 f"- Rule ID: {row['rule_id']}\n"
                                 f"- File: {row['rel_path']}\n"
                                 f"- Line: {row['line']}\n"
                                 f"- Description: {row['message']}\n"
-                                f"- Source snippet:\n```\n{snippet or '(not available)'}\n```"
+                                f"- Source snippet:\n```\n{snippet or '(not available)'}\n```\n"
+                                f"{custom_block}"
                             )
 
                         user_input = st.chat_input(
@@ -441,7 +583,7 @@ if SARIF_PATH.exists():
                         )
 
                         if user_input:
-                            combined_query = _build_prompt(user_input)
+                            grounding_context = _build_context(user_input)
 
                             st.session_state[chat_key].append(
                                 {"role": "user", "content": user_input}
@@ -455,10 +597,14 @@ if SARIF_PATH.exists():
                                         "--disable-mcp",
                                         "--disable-subagents",
                                         "--format", "json",
-                                        combined_query,
+                                        user_input,         # positional arg = the question
                                     ],
+                                    input=grounding_context,  # stdin = context only
                                     capture_output=True,
                                     text=True,
+                                    encoding="utf-8",
+                                    errors="replace",
+                                    timeout=60,
                                     env={**os.environ, "BOBSHELL_API_KEY": _BOB_API_KEY},
                                     cwd=str(Path(__file__).resolve().parent),
                                 )
@@ -484,6 +630,29 @@ if SARIF_PATH.exists():
                             )
 
                             st.rerun()
+
+                        st.caption(
+                            "⚠️ Bob is AI and can make mistakes. "
+                            "Always review generated fixes and explanations before applying them."
+                        )
+
+            # ── Bottom pagination bar ─────────────────────────────────────────
+            if filtered_rows:
+                _, bc1, bc2, bc3, _ = st.columns([2, 1, 2, 1, 2])
+                with bc1:
+                    if st.button("◀ Prev", disabled=(current_page <= 1), key="page_prev"):
+                        st.session_state["findings_page"] -= 1
+                        st.rerun()
+                with bc2:
+                    st.markdown(
+                        f"<div style='text-align:center;padding-top:6px'>"
+                        f"Page {current_page} of {total_pages}</div>",
+                        unsafe_allow_html=True,
+                    )
+                with bc3:
+                    if st.button("Next ▶", disabled=(current_page >= total_pages), key="page_next"):
+                        st.session_state["findings_page"] += 1
+                        st.rerun()
 
     except (json.JSONDecodeError, KeyError, IndexError) as exc:
         st.error(f"Could not parse SARIF report: {exc}")

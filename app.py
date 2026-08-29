@@ -63,7 +63,7 @@ if SARIF_PATH.exists():
 
 _metric_card(col1, "Vulnerabilities Found", str(vuln_count))
 _metric_card(col2, "Security Gaps Detected", str(max(0, vuln_count - 1)))
-_metric_card(col3, "Est. Time Saved (hrs)", "4.5")
+_metric_card(col3, "Est. Time Saved (hrs)", f"{vuln_count * 0.25:.1f}")
 
 st.markdown("---")
 

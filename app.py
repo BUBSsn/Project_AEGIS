@@ -90,11 +90,11 @@ st.markdown(
     }
     </style>
     <div>
-        <span class="lang-pill">🐍 Python</span>
-        <span class="lang-pill">🗄️ SQL</span>
-        <span class="lang-pill">🐘 PHP</span>
-        <span class="lang-pill">☕ Java</span>
-        <span class="lang-pill">🟨 JavaScript / TypeScript</span>
+        <span class="lang-pill">Python</span>
+        <span class="lang-pill">SQL</span>
+        <span class="lang-pill">PHP</span>
+        <span class="lang-pill">Java</span>
+        <span class="lang-pill">JavaScript / TypeScript</span>
     </div>
     """,
     unsafe_allow_html=True,

@@ -53,196 +53,6 @@
           ]
         },
         {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'algorithms.TripleDES' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pyca.py"
-                },
-                "region": {
-                  "startLine": 15
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'algorithms.Blowfish' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pyca.py"
-                },
-                "region": {
-                  "startLine": 16
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'algorithms.ARC4' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pyca.py"
-                },
-                "region": {
-                  "startLine": 17
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'DES' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 12
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'DES3' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 15
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'ARC2' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 18
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'ARC4' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 21
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'Blowfish' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 24
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-95",
-          "level": "error",
-          "message": {
-            "text": "Dangerous execution function 'eval()' used."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/injection/dynamic-code-injection.py"
-                },
-                "region": {
-                  "startLine": 8
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-90",
-          "level": "error",
-          "message": {
-            "text": "LDAP injection risk: 'search_s()' called with a dynamically constructed filter. Sanitize user input first."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/injection/ldap-injection.py"
-                },
-                "region": {
-                  "startLine": 16
-                }
-              }
-            }
-          ]
-        },
-        {
           "ruleId": "CWE-347",
           "level": "error",
           "message": {
@@ -389,6 +199,196 @@
                 },
                 "region": {
                   "startLine": 14
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-90",
+          "level": "error",
+          "message": {
+            "text": "LDAP injection risk: 'search_s()' called with a dynamically constructed filter. Sanitize user input first."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/injection/ldap-injection.py"
+                },
+                "region": {
+                  "startLine": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-95",
+          "level": "error",
+          "message": {
+            "text": "Dangerous execution function 'eval()' used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/injection/dynamic-code-injection.py"
+                },
+                "region": {
+                  "startLine": 8
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-327",
+          "level": "warning",
+          "message": {
+            "text": "Weak cipher 'algorithms.TripleDES' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/ciphers/pyca.py"
+                },
+                "region": {
+                  "startLine": 15
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-327",
+          "level": "warning",
+          "message": {
+            "text": "Weak cipher 'algorithms.Blowfish' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/ciphers/pyca.py"
+                },
+                "region": {
+                  "startLine": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-327",
+          "level": "warning",
+          "message": {
+            "text": "Weak cipher 'algorithms.ARC4' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/ciphers/pyca.py"
+                },
+                "region": {
+                  "startLine": 17
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-327",
+          "level": "warning",
+          "message": {
+            "text": "Weak cipher 'DES' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-327",
+          "level": "warning",
+          "message": {
+            "text": "Weak cipher 'DES3' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
+                },
+                "region": {
+                  "startLine": 15
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-327",
+          "level": "warning",
+          "message": {
+            "text": "Weak cipher 'ARC2' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-327",
+          "level": "warning",
+          "message": {
+            "text": "Weak cipher 'ARC4' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
+                },
+                "region": {
+                  "startLine": 21
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-327",
+          "level": "warning",
+          "message": {
+            "text": "Weak cipher 'Blowfish' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
+                },
+                "region": {
+                  "startLine": 24
                 }
               }
             }

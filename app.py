@@ -16,22 +16,28 @@ st.set_page_config(
     layout="wide",
 )
 
-# Dark-mode styling
+# Theme-aware styling: respects light/dark mode via CSS media query
 st.markdown(
     """
     <style>
-    [data-testid="stAppViewContainer"] { background-color: #0d1117; color: #e6edf3; }
-    [data-testid="stSidebar"] { background-color: #161b22; }
+    /* ── Metric Card Styling (Adapts to Light/Dark Mode Natively) ── */
     .metric-card {
-        background: #161b22;
-        border: 1px solid #30363d;
+        background-color: rgba(130, 130, 130, 0.1);
+        border: 1px solid rgba(130, 130, 130, 0.2);
         border-radius: 8px;
         padding: 20px 24px;
         text-align: center;
     }
-    .metric-value { font-size: 2.4rem; font-weight: 700; color: #e6edf3; }
-    .metric-label { font-size: 0.85rem; color: #8b949e; margin-top: 4px; }
-    h1, h2, h3 { color: #e6edf3; }
+    .metric-value { 
+        font-size: 2.4rem; 
+        font-weight: 700; 
+        /* Let Streamlit dictate the text color */
+    }
+    .metric-label { 
+        font-size: 0.85rem; 
+        margin-top: 4px; 
+        opacity: 0.7; /* Fades the text slightly based on the current theme color */
+    }
     </style>
     """,
     unsafe_allow_html=True,

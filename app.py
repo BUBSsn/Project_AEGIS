@@ -4,6 +4,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import List, Optional
 
@@ -13,11 +14,61 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from core.mcp_server import clone_github_repo, scan_ast_vulnerabilities
 
-SARIF_PATH = Path("reports/security-findings.sarif")
+SARIF_PATH    = Path("reports/security-findings.sarif")
+BOOKMARKS_PATH = Path("reports/bookmarks.json")
+CHAT_PERSIST_PATH = Path("reports/chat_history.json")
 
 # ── Bob Shell availability (resolved once at startup) ─────────────────────────
 _BOB_EXE     = shutil.which("bob")
 _BOB_API_KEY = os.environ.get("BOBSHELL_API_KEY", "")
+
+
+# ── Persistence helpers ────────────────────────────────────────────────────────
+
+def _load_bookmarks() -> set:
+    """Load bookmarked finding keys from disk. Keys are 'rel_path:line:rule_id'."""
+    try:
+        if BOOKMARKS_PATH.exists():
+            return set(json.loads(BOOKMARKS_PATH.read_text(encoding="utf-8")))
+    except (json.JSONDecodeError, OSError):
+        pass
+    return set()
+
+
+def _save_bookmarks(bookmarks: set) -> None:
+    """Persist the bookmark set to disk."""
+    try:
+        BOOKMARKS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        BOOKMARKS_PATH.write_text(
+            json.dumps(sorted(bookmarks), indent=2), encoding="utf-8"
+        )
+    except OSError:
+        pass
+
+
+def _bookmark_key(row: dict) -> str:
+    return f"{row['rel_path']}:{row['line']}:{row['rule_id']}"
+
+
+def _load_chat_history() -> dict:
+    """Load all persisted Bob chat histories from disk."""
+    try:
+        if CHAT_PERSIST_PATH.exists():
+            return json.loads(CHAT_PERSIST_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        pass
+    return {}
+
+
+def _save_chat_history(all_chats: dict) -> None:
+    """Persist all Bob chat histories to disk."""
+    try:
+        CHAT_PERSIST_PATH.parent.mkdir(parents=True, exist_ok=True)
+        CHAT_PERSIST_PATH.write_text(
+            json.dumps(all_chats, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+    except OSError:
+        pass
 
 st.set_page_config(
     page_title="AEGIS: Automated Test & Security Hub",
@@ -36,16 +87,26 @@ st.markdown(
         border-radius: 8px;
         padding: 20px 24px;
         text-align: center;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
     .metric-value {
         font-size: 2.4rem;
         font-weight: 700;
-        /* Let Streamlit dictate the text color */
     }
     .metric-label {
         font-size: 0.85rem;
         margin-top: 4px;
-        opacity: 0.7; /* Fades the text slightly based on the current theme color */
+        opacity: 0.7;
+    }
+    .metric-sub {
+        font-size: 0.72rem;
+        margin-top: 6px;
+        opacity: 0.5;
+        font-style: italic;
+        min-height: 1em;
     }
 
     /* ── Skeleton shimmer (applied via inline style= on individual elements) ── */
@@ -90,14 +151,23 @@ def _sk_metric_col(col) -> None:
         unsafe_allow_html=True,
     )
 
-col1, col2, col3 = st.columns(3)
+# Average manual triage time per vulnerability finding (minutes).
+# Source: NIST "Costs and Benefits of Software Security Practices" (2022)
+# estimates ~30 min of engineer time to manually identify, triage, and
+# document a single vulnerability.  See also: NIST SP 800-218 §3.4.
+# https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-218.pdf
+_MANUAL_REVIEW_MINUTES_PER_VULN = 30
 
-def _metric_card(col, label: str, value: str) -> None:
+col1, col2, col3, col4 = st.columns(4)
+
+def _metric_card(col, label: str, value: str, sub: str = "") -> None:
+    sub_html = f'<div class="metric-sub">{sub}</div>' if sub else '<div class="metric-sub">&nbsp;</div>'
     col.markdown(
-        f"""<div class="metric-card">
-            <div class="metric-value">{value}</div>
-            <div class="metric-label">{label}</div>
-        </div>""",
+        '<div class="metric-card">'
+        f'<div class="metric-value">{value}</div>'
+        f'<div class="metric-label">{label}</div>'
+        f'{sub_html}'
+        '</div>',
         unsafe_allow_html=True,
     )
 
@@ -105,21 +175,37 @@ vuln_count = 0
 sarif_ready = False
 if SARIF_PATH.exists():
     try:
-        sarif = json.loads(SARIF_PATH.read_text())
+        sarif = json.loads(SARIF_PATH.read_text(encoding="utf-8"))
         results = sarif.get("runs", [{}])[0].get("results", [])
         vuln_count = len(results)
         sarif_ready = True
     except (json.JSONDecodeError, IndexError):
         pass
 
+# Retrieve last scan duration stored by the scan form (None before first scan)
+last_scan_secs: Optional[float] = st.session_state.get("last_scan_duration_secs")
+
 if sarif_ready:
+    manual_mins = vuln_count * _MANUAL_REVIEW_MINUTES_PER_VULN
+    manual_label = f"{manual_mins // 60}h {manual_mins % 60}m" if manual_mins >= 60 else f"{manual_mins}m"
     _metric_card(col1, "Vulnerabilities Found", str(vuln_count))
     _metric_card(col2, "Security Gaps Detected", str(max(0, vuln_count - 1)))
-    _metric_card(col3, "Est. Time Saved (hrs)", f"{vuln_count * 0.25:.1f}")
+    if last_scan_secs is not None:
+        scan_label = f"{last_scan_secs:.1f}s" if last_scan_secs < 60 else f"{last_scan_secs / 60:.1f}m"
+        _metric_card(col3, "Scan Duration", scan_label, sub="automated — this run")
+    else:
+        _metric_card(col3, "Scan Duration", "—", sub="run a scan to measure")
+    _metric_card(
+        col4,
+        "Est. Manual Review Time",
+        manual_label,
+        sub=f"{_MANUAL_REVIEW_MINUTES_PER_VULN} min/finding · NIST SP 800-218",
+    )
 else:
     _sk_metric_col(col1)
     _sk_metric_col(col2)
     _sk_metric_col(col3)
+    _sk_metric_col(col4)
 
 st.markdown("---")
 
@@ -174,10 +260,12 @@ if submitted:
             else:
                 status.write(clone_result)
                 status.write("Running AST security scan…")
+                _t0 = time.perf_counter()
                 scan_result = scan_ast_vulnerabilities(
                     target_dir="src",
                     output_sarif="reports/security-findings.sarif",
                 )
+                st.session_state["last_scan_duration_secs"] = time.perf_counter() - _t0
                 if scan_result.startswith("Scan Error"):
                     status.update(label="Scan failed", state="error", expanded=True)
                     st.error(scan_result)
@@ -460,24 +548,42 @@ elif SARIF_PATH.exists():
         if not rows:
             st.info("No vulnerabilities found in the last scan.")
         else:
+            # ── Load persisted bookmarks into session state once per run ──────
+            if "bookmarks" not in st.session_state:
+                st.session_state["bookmarks"] = _load_bookmarks()
+
+            # ── Load persisted chat histories into session state once per run ─
+            if "_chats_loaded" not in st.session_state:
+                persisted = _load_chat_history()
+                for k, v in persisted.items():
+                    if k not in st.session_state:
+                        st.session_state[k] = v
+                st.session_state["_chats_loaded"] = True
+
             # ── 1. Filter panel ───────────────────────────────────────────────
             all_severities = sorted({r["severity"].capitalize() for r in rows})
             all_rule_ids   = sorted({r["rule_id"] for r in rows})
 
-            fc1, fc2, fc3 = st.columns(3)
-            with fc1:
+            ff1, ff2 = st.columns([2, 2])
+            with ff1:
                 sel_severities = st.multiselect(
                     "Severity", options=all_severities, default=all_severities,
                     key="filter_severity",
                 )
-            with fc2:
+            with ff2:
                 sel_rule_ids = st.multiselect(
                     "Rule ID (CWE)", options=all_rule_ids, default=all_rule_ids,
                     key="filter_rule_id",
                 )
-            with fc3:
+            fs1, fs2 = st.columns([3, 1])
+            with fs1:
                 file_search = st.text_input(
                     "File search", placeholder="substring match…", key="filter_file",
+                )
+            with fs2:
+                st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+                show_bookmarked_only = st.checkbox(
+                    "⭐ Bookmarked only", key="filter_bookmarked"
                 )
 
             filtered_rows = [
@@ -485,6 +591,7 @@ elif SARIF_PATH.exists():
                 if r["severity"].capitalize() in sel_severities
                 and r["rule_id"] in sel_rule_ids
                 and file_search.lower() in r["rel_path"].lower()
+                and (not show_bookmarked_only or _bookmark_key(r) in st.session_state["bookmarks"])
             ]
 
             # Sort: errors/critical first, then warnings, then notes/unknown
@@ -559,11 +666,24 @@ elif SARIF_PATH.exists():
 
             for row in page_rows:
                 emoji   = _severity_emoji(row["severity"])
-                label   = f"{emoji} {row['rel_path']}  (Line {row['line']})"
+                bkey    = _bookmark_key(row)
+                is_bookmarked = bkey in st.session_state["bookmarks"]
+                bookmark_icon = "⭐" if is_bookmarked else "☆"
+                label   = f"{bookmark_icon} {emoji} {row['rel_path']}  (Line {row['line']})"
                 ext     = Path(row["rel_path"]).suffix.lower()
                 lang    = _EXT_TO_LANG.get(ext, "text")
 
                 with st.expander(label, expanded=False):
+                    # ── Bookmark toggle ───────────────────────────────────────
+                    btn_label = "⭐ Remove bookmark" if is_bookmarked else "☆ Bookmark this finding"
+                    if st.button(btn_label, key=f"bm_{bkey}"):
+                        if is_bookmarked:
+                            st.session_state["bookmarks"].discard(bkey)
+                        else:
+                            st.session_state["bookmarks"].add(bkey)
+                        _save_bookmarks(st.session_state["bookmarks"])
+                        st.rerun()
+
                     # Metadata block
                     c1, c2 = st.columns([1, 3])
                     with c1:
@@ -676,6 +796,19 @@ elif SARIF_PATH.exists():
                             with st.chat_message(msg["role"]):
                                 st.markdown(msg["content"])
 
+                        # Clear chat button — only shown when there is history
+                        if st.session_state[chat_key]:
+                            if st.button(
+                                "🗑️ Clear chat history",
+                                key=f"clear_chat_{row['rel_path']}_{row['line']}",
+                            ):
+                                st.session_state[chat_key] = []
+                                # Remove from disk too
+                                persisted_chats = _load_chat_history()
+                                persisted_chats.pop(chat_key, None)
+                                _save_chat_history(persisted_chats)
+                                st.rerun()
+
                         # CLI arg = the user's question; stdin = grounding context only.
                         # Keeping them separate prevents Bob from treating context as the question.
                         def _build_context(question: str) -> str:
@@ -765,6 +898,11 @@ elif SARIF_PATH.exists():
                                 {"role": "assistant", "content": response}
                             )
 
+                            # Persist all chat histories to disk after every new message
+                            all_chats = _load_chat_history()
+                            all_chats[chat_key] = st.session_state[chat_key]
+                            _save_chat_history(all_chats)
+
                             st.rerun()
 
                         st.caption(
@@ -774,21 +912,48 @@ elif SARIF_PATH.exists():
 
             # ── Bottom pagination bar ─────────────────────────────────────────
             if filtered_rows:
-                _, bc1, bc2, bc3, _ = st.columns([2, 1, 2, 1, 2])
-                with bc1:
-                    if st.button("◀ Prev", disabled=(current_page <= 1), key="page_prev"):
-                        st.session_state["findings_page"] -= 1
-                        st.rerun()
-                with bc2:
+                st.markdown(
+                    """
+                    <style>
+                    div[data-testid="stHorizontalBlock"]:has(> div > div[data-testid="stButton"]) button {
+                        width: 100%;
+                    }
+                    .pagination-label {
+                        text-align: center;
+                        padding-top: 6px;
+                        font-size: 0.9rem;
+                    }
+                    </style>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                pg_left, pg_mid, pg_right = st.columns([1, 2, 1])
+                with pg_left:
+                    st.button(
+                        "◀  Prev",
+                        disabled=(current_page <= 1),
+                        key="page_prev",
+                        use_container_width=True,
+                        on_click=lambda: st.session_state.update(
+                            findings_page=st.session_state["findings_page"] - 1
+                        ),
+                    )
+                with pg_mid:
                     st.markdown(
-                        f"<div style='text-align:center;padding-top:6px'>"
+                        f"<div class='pagination-label'>"
                         f"Page {current_page} of {total_pages}</div>",
                         unsafe_allow_html=True,
                     )
-                with bc3:
-                    if st.button("Next ▶", disabled=(current_page >= total_pages), key="page_next"):
-                        st.session_state["findings_page"] += 1
-                        st.rerun()
+                with pg_right:
+                    st.button(
+                        "Next  ▶",
+                        disabled=(current_page >= total_pages),
+                        key="page_next",
+                        use_container_width=True,
+                        on_click=lambda: st.session_state.update(
+                            findings_page=st.session_state["findings_page"] + 1
+                        ),
+                    )
 
     except (json.JSONDecodeError, KeyError, IndexError) as exc:
         st.error(f"Could not parse SARIF report: {exc}")

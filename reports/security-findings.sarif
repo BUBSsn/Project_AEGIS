@@ -34,320 +34,35 @@
       },
       "results": [
         {
-          "ruleId": "CWE-359",
-          "level": "warning",
-          "message": {
-            "text": "Sensitive value concatenated into print(). Avoid logging or printing credentials."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/print-password.py"
-                },
-                "region": {
-                  "startLine": 4
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'algorithms.TripleDES' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pyca.py"
-                },
-                "region": {
-                  "startLine": 15
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'algorithms.Blowfish' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pyca.py"
-                },
-                "region": {
-                  "startLine": 16
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'algorithms.ARC4' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pyca.py"
-                },
-                "region": {
-                  "startLine": 17
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'DES' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 12
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'DES3' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 15
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'ARC2' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 18
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'ARC4' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 21
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-327",
-          "level": "warning",
-          "message": {
-            "text": "Weak cipher 'Blowfish' used. Replace with AES-256-GCM or ChaCha20-Poly1305."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/ciphers/pycryptodomex.py"
-                },
-                "region": {
-                  "startLine": 24
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-95",
+          "ruleId": "CWE-89",
           "level": "error",
           "message": {
-            "text": "Dangerous execution function 'eval()' used."
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/SAST/python/injection/dynamic-code-injection.py"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/dbSchemaChallenge_1.ts"
                 },
                 "region": {
-                  "startLine": 8
+                  "startLine": 5
                 }
               }
             }
           ]
         },
         {
-          "ruleId": "CWE-90",
+          "ruleId": "CWE-89",
           "level": "error",
           "message": {
-            "text": "LDAP injection risk: 'search_s()' called with a dynamically constructed filter. Sanitize user input first."
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/SAST/python/injection/ldap-injection.py"
-                },
-                "region": {
-                  "startLine": 16
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-347",
-          "level": "error",
-          "message": {
-            "text": "JWT signature verification disabled in 'decode()'. Tokens can be forged. Remove verify=False / verify_signature=False."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/verification/pyjwt.py"
-                },
-                "region": {
-                  "startLine": 9
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-347",
-          "level": "error",
-          "message": {
-            "text": "JWT signature verification disabled in 'decode()'. Tokens can be forged. Remove verify=False / verify_signature=False."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/verification/pyjwt.py"
-                },
-                "region": {
-                  "startLine": 10
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-347",
-          "level": "warning",
-          "message": {
-            "text": "'process_jwt()' does not verify the JWT signature. Use 'verify_jwt()' instead."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/verification/python-jwt.py"
-                },
-                "region": {
-                  "startLine": 9
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-295",
-          "level": "error",
-          "message": {
-            "text": "ssl._create_unverified_context() creates an unverified SSL context. Use ssl.create_default_context() instead."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/verification/ssl-standard.py"
-                },
-                "region": {
-                  "startLine": 7
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-295",
-          "level": "error",
-          "message": {
-            "text": "ssl._create_stdlib_context() creates an unverified SSL context. Use ssl.create_default_context() instead."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/verification/ssl-standard.py"
-                },
-                "region": {
-                  "startLine": 8
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-295",
-          "level": "error",
-          "message": {
-            "text": "SSL/TLS hostname verification disabled via 'check_hostname = False'. This allows MITM attacks."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/SAST/python/verification/ssl-standard.py"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/dbSchemaChallenge_3.ts"
                 },
                 "region": {
                   "startLine": 11
@@ -357,54 +72,149 @@
           ]
         },
         {
-          "ruleId": "CWE-295",
+          "ruleId": "CWE-89",
           "level": "error",
           "message": {
-            "text": "ssl._create_default_https_context() creates an unverified SSL context. Use ssl.create_default_context() instead."
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/SAST/python/verification/ssl-standard.py"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/loginAdminChallenge_1.ts"
                 },
                 "region": {
-                  "startLine": 13
+                  "startLine": 18
                 }
               }
             }
           ]
         },
         {
-          "ruleId": "CWE-295",
+          "ruleId": "CWE-89",
           "level": "error",
           "message": {
-            "text": "SSL/TLS hostname verification disabled via 'check_hostname = False'. This allows MITM attacks."
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/SAST/python/verification/ssl-standard.py"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/loginAdminChallenge_2.ts"
                 },
                 "region": {
-                  "startLine": 14
+                  "startLine": 15
                 }
               }
             }
           ]
         },
         {
-          "ruleId": "CWE-79",
+          "ruleId": "CWE-89",
           "level": "error",
           "message": {
-            "text": "Unescaped user-controlled value passed to echo/print. Wrap with htmlspecialchars() to prevent XSS."
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "C:/Users/Samuel/Documents/ProjectAegis/Project_AEGIS/src/SAST/php/basic-collection.php"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/loginBenderChallenge_1.ts"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-89",
+          "level": "error",
+          "message": {
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/loginBenderChallenge_3.ts"
+                },
+                "region": {
+                  "startLine": 15
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-89",
+          "level": "error",
+          "message": {
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/loginBenderChallenge_4.ts"
+                },
+                "region": {
+                  "startLine": 15
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-89",
+          "level": "error",
+          "message": {
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/loginJimChallenge_2.ts"
+                },
+                "region": {
+                  "startLine": 15
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-89",
+          "level": "error",
+          "message": {
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/loginJimChallenge_4.ts"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-89",
+          "level": "error",
+          "message": {
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/unionSqlInjectionChallenge_1.ts"
                 },
                 "region": {
                   "startLine": 6
@@ -417,13 +227,13 @@
           "ruleId": "CWE-89",
           "level": "error",
           "message": {
-            "text": "SQL query constructed with unsanitized user input. Use prepared statements with bound parameters."
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "C:/Users/Samuel/Documents/ProjectAegis/Project_AEGIS/src/SAST/php/basic-collection.php"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/data/static/codefixes/unionSqlInjectionChallenge_3.ts"
                 },
                 "region": {
                   "startLine": 10
@@ -433,38 +243,19 @@
           ]
         },
         {
-          "ruleId": "CWE-78",
-          "level": "error",
-          "message": {
-            "text": "OS command executed with a dynamic argument. Use escapeshellarg() or avoid shell execution."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "C:/Users/Samuel/Documents/ProjectAegis/Project_AEGIS/src/SAST/php/basic-collection.php"
-                },
-                "region": {
-                  "startLine": 14
-                }
-              }
-            }
-          ]
-        },
-        {
-          "ruleId": "CWE-352",
+          "ruleId": "CWE-798",
           "level": "warning",
           "message": {
-            "text": "POST request handler found without a CSRF token check. Add a synchronizer token to all state-changing requests."
+            "text": "Hard-coded credential in variable 'BeeTokenAddress'. Use environment variables or a secrets manager."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "C:/Users/Samuel/Documents/ProjectAegis/Project_AEGIS/src/SAST/php/basic-collection.php"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/frontend/src/app/faucet/faucet.component.ts"
                 },
                 "region": {
-                  "startLine": 9
+                  "startLine": 34
                 }
               }
             }
@@ -474,16 +265,206 @@
           "ruleId": "CWE-798",
           "level": "warning",
           "message": {
-            "text": "Hard-coded value assigned to credential variable '$password'. Use environment variables or a secrets manager."
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "C:/Users/Samuel/Documents/ProjectAegis/Project_AEGIS/src/SAST/php/password-exposure.php"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/frontend/src/app/oauth/oauth.component.spec.ts"
                 },
                 "region": {
-                  "startLine": 4
+                  "startLine": 91
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/frontend/src/app/oauth/oauth.component.spec.ts"
+                },
+                "region": {
+                  "startLine": 98
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/frontend/src/app/payment/payment.component.spec.ts"
+                },
+                "region": {
+                  "startLine": 351
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/frontend/src/app/register/register.component.spec.ts"
+                },
+                "region": {
+                  "startLine": 155
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/frontend/src/app/Services/two-factor-auth-service.spec.ts"
+                },
+                "region": {
+                  "startLine": 68
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/frontend/src/app/two-factor-auth/two-factor-auth.component.spec.ts"
+                },
+                "region": {
+                  "startLine": 243
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-95",
+          "level": "error",
+          "message": {
+            "text": "eval() / new Function() called with dynamic or user-controlled input. This allows arbitrary code execution."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/frontend/src/assets/private/three.js"
+                },
+                "region": {
+                  "startLine": 42
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-78",
+          "level": "error",
+          "message": {
+            "text": "OS command executed with dynamic/user-controlled argument. Use execFile with an argument array instead of exec(string)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/lib/codingChallenges.ts"
+                },
+                "region": {
+                  "startLine": 76
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-78",
+          "level": "error",
+          "message": {
+            "text": "OS command executed with dynamic/user-controlled argument. Use execFile with an argument array instead of exec(string)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/lib/codingChallenges.ts"
+                },
+                "region": {
+                  "startLine": 78
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-327",
+          "level": "warning",
+          "message": {
+            "text": "MD5 or SHA-1 hash used for security-sensitive purpose. Use SHA-256 or stronger."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/lib/insecurity.ts"
+                },
+                "region": {
+                  "startLine": 41
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/lib/webhook.ts"
+                },
+                "region": {
+                  "startLine": 19
                 }
               }
             }
@@ -493,13 +474,2711 @@
           "ruleId": "CWE-89",
           "level": "error",
           "message": {
-            "text": "SQL query constructed with unsanitized user input. Use prepared statements with bound parameters."
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "C:/Users/Samuel/Documents/ProjectAegis/Project_AEGIS/src/SAST/php/sql-injection.php"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/routes/login.ts"
+                },
+                "region": {
+                  "startLine": 34
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-89",
+          "level": "error",
+          "message": {
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/routes/search.ts"
+                },
+                "region": {
+                  "startLine": 23
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-89",
+          "level": "error",
+          "message": {
+            "text": "SQL query built with string concatenation or template literal from user input. Use parameterized queries."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/routes/search.ts"
+                },
+                "region": {
+                  "startLine": 47
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 42
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 66
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 85
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 104
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 123
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 141
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 142
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 156
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential in variable 'secret'. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 182
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential in variable 'secret'. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 214
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential in variable 'secret'. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 240
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 257
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential in variable 'secret'. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 266
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential in variable 'password'. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 291
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential in variable 'totpSecret'. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 292
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential in variable 'secret'. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 317
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential in variable 'totpSecret'. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 352
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential in variable 'totpSecret'. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 379
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/2fa.test.ts"
+                },
+                "region": {
+                  "startLine": 412
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/address.test.ts"
+                },
+                "region": {
+                  "startLine": 24
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/authenticated-users.test.ts"
+                },
+                "region": {
+                  "startLine": 37
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/basket-item.test.ts"
+                },
+                "region": {
+                  "startLine": 23
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/basket.test.ts"
+                },
+                "region": {
+                  "startLine": 32
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/basket.test.ts"
+                },
+                "region": {
+                  "startLine": 114
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/basket.test.ts"
+                },
+                "region": {
+                  "startLine": 170
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/basket.test.ts"
+                },
+                "region": {
+                  "startLine": 181
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/basket.test.ts"
+                },
+                "region": {
+                  "startLine": 192
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/chat.test.ts"
+                },
+                "region": {
+                  "startLine": 261
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/chat.test.ts"
+                },
+                "region": {
+                  "startLine": 330
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 53
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 73
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 90
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 110
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 134
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 162
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 189
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 216
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 251
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 285
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 321
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 343
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/data-export.test.ts"
+                },
+                "region": {
+                  "startLine": 358
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/delivery.test.ts"
+                },
+                "region": {
+                  "startLine": 28
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/delivery.test.ts"
+                },
+                "region": {
+                  "startLine": 54
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/delivery.test.ts"
+                },
+                "region": {
+                  "startLine": 82
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/delivery.test.ts"
+                },
+                "region": {
+                  "startLine": 115
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 25
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 40
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 55
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 70
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 85
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 110
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 128
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 146
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 165
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 183
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/deluxe.test.ts"
+                },
+                "region": {
+                  "startLine": 201
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/erasure-request.test.ts"
+                },
+                "region": {
+                  "startLine": 24
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/erasure-request.test.ts"
+                },
+                "region": {
+                  "startLine": 36
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/erasure-request.test.ts"
+                },
+                "region": {
+                  "startLine": 55
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/erasure-request.test.ts"
+                },
+                "region": {
+                  "startLine": 68
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/erasure-request.test.ts"
+                },
+                "region": {
+                  "startLine": 82
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/erasure-request.test.ts"
+                },
+                "region": {
+                  "startLine": 94
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/erasure-request.test.ts"
+                },
+                "region": {
+                  "startLine": 106
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/feedback.test.ts"
+                },
+                "region": {
+                  "startLine": 117
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/feedback.test.ts"
+                },
+                "region": {
+                  "startLine": 143
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 27
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 36
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 76
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 90
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 104
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 118
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 132
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 147
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 245
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/login.test.ts"
+                },
+                "region": {
+                  "startLine": 267
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/memory.test.ts"
+                },
+                "region": {
+                  "startLine": 32
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/memory.test.ts"
+                },
+                "region": {
+                  "startLine": 53
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/memory.test.ts"
+                },
+                "region": {
+                  "startLine": 66
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/memory.test.ts"
+                },
+                "region": {
+                  "startLine": 78
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/memory.test.ts"
+                },
+                "region": {
+                  "startLine": 93
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/order-history.test.ts"
+                },
+                "region": {
+                  "startLine": 25
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/order-history.test.ts"
+                },
+                "region": {
+                  "startLine": 56
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/order-history.test.ts"
+                },
+                "region": {
+                  "startLine": 69
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/order-history.test.ts"
+                },
+                "region": {
+                  "startLine": 82
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/order-history.test.ts"
+                },
+                "region": {
+                  "startLine": 97
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/order-history.test.ts"
+                },
+                "region": {
+                  "startLine": 111
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/order-history.test.ts"
+                },
+                "region": {
+                  "startLine": 125
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/password.test.ts"
+                },
+                "region": {
+                  "startLine": 28
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/password.test.ts"
+                },
+                "region": {
+                  "startLine": 32
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/password.test.ts"
+                },
+                "region": {
+                  "startLine": 44
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/password.test.ts"
+                },
+                "region": {
+                  "startLine": 95
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/payment.test.ts"
+                },
+                "region": {
+                  "startLine": 20
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/product-review.test.ts"
+                },
+                "region": {
+                  "startLine": 101
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/product-review.test.ts"
+                },
+                "region": {
+                  "startLine": 115
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/profile-image-upload.test.ts"
+                },
+                "region": {
+                  "startLine": 31
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/profile-image-upload.test.ts"
+                },
+                "region": {
+                  "startLine": 48
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/profile-image-upload.test.ts"
+                },
+                "region": {
+                  "startLine": 77
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/profile-image-upload.test.ts"
+                },
+                "region": {
+                  "startLine": 95
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/profile-image-upload.test.ts"
+                },
+                "region": {
+                  "startLine": 110
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/profile-image-upload.test.ts"
+                },
+                "region": {
+                  "startLine": 137
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/profile-image-upload.test.ts"
+                },
+                "region": {
+                  "startLine": 161
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 25
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 37
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 49
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 61
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 74
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 87
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 102
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 115
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 128
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 140
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 152
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 166
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 180
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 193
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 207
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 219
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/quantity.test.ts"
+                },
+                "region": {
+                  "startLine": 231
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user-profile.test.ts"
+                },
+                "region": {
+                  "startLine": 21
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user-profile.test.ts"
+                },
+                "region": {
+                  "startLine": 58
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 52
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 68
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 136
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 154
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 172
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 189
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 240
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 289
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 304
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/user.test.ts"
+                },
+                "region": {
+                  "startLine": 318
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/wallet.test.ts"
+                },
+                "region": {
+                  "startLine": 81
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/api/wallet.test.ts"
+                },
+                "region": {
+                  "startLine": 86
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/administration.spec.ts"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/b2bOrder.spec.ts"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/b2bOrder.spec.ts"
+                },
+                "region": {
+                  "startLine": 37
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/b2bOrder.spec.ts"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/basket.spec.ts"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/basket.spec.ts"
+                },
+                "region": {
+                  "startLine": 76
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/basket.spec.ts"
                 },
                 "region": {
                   "startLine": 13
@@ -512,13 +3191,184 @@
           "ruleId": "CWE-798",
           "level": "warning",
           "message": {
-            "text": "Hard-coded credential value assigned to 'password'. Use environment variables or a secrets manager."
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "C:/Users/Samuel/Documents/ProjectAegis/Project_AEGIS/src/SAST/java/sample.java"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/changePassword.spec.ts"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/changePassword.spec.ts"
+                },
+                "region": {
+                  "startLine": 25
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/changePassword.spec.ts"
+                },
+                "region": {
+                  "startLine": 31
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/chatbot.spec.ts"
+                },
+                "region": {
+                  "startLine": 8
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/complain.spec.ts"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/complain.spec.ts"
+                },
+                "region": {
+                  "startLine": 25
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/contact.spec.ts"
+                },
+                "region": {
+                  "startLine": 11
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/contact.spec.ts"
+                },
+                "region": {
+                  "startLine": 47
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/contact.spec.ts"
+                },
+                "region": {
+                  "startLine": 161
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/dataErasure.spec.ts"
                 },
                 "region": {
                   "startLine": 3
@@ -528,19 +3378,494 @@
           ]
         },
         {
-          "ruleId": "CWE-79",
-          "level": "error",
+          "ruleId": "CWE-352",
+          "level": "warning",
           "message": {
-            "text": "User-controlled value assigned to a DOM sink (innerHTML/outerHTML/document.write/jQuery.html). Sanitize with DOMPurify or textContent."
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "C:/Users/Samuel/Documents/ProjectAegis/Project_AEGIS/src/SAST/typescript/dom-xss.js"
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/dataErasure.spec.ts"
                 },
                 "region": {
-                  "startLine": 9
+                  "startLine": 14
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/dataExport.spec.ts"
+                },
+                "region": {
+                  "startLine": 24
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/deluxe.spec.ts"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/deluxe.spec.ts"
+                },
+                "region": {
+                  "startLine": 21
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/deluxe.spec.ts"
+                },
+                "region": {
+                  "startLine": 27
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/noSql.spec.ts"
+                },
+                "region": {
+                  "startLine": 8
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/noSql.spec.ts"
+                },
+                "region": {
+                  "startLine": 53
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/noSql.spec.ts"
+                },
+                "region": {
+                  "startLine": 76
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/noSql.spec.ts"
+                },
+                "region": {
+                  "startLine": 120
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/noSql.spec.ts"
+                },
+                "region": {
+                  "startLine": 59
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/passwordHashLeak.spec.ts"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/profile.spec.ts"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-78",
+          "level": "error",
+          "message": {
+            "text": "OS command executed with dynamic/user-controlled argument. Use execFile with an argument array instead of exec(string)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/profile.spec.ts"
+                },
+                "region": {
+                  "startLine": 55
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/register.spec.ts"
+                },
+                "region": {
+                  "startLine": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/register.spec.ts"
+                },
+                "region": {
+                  "startLine": 84
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/register.spec.ts"
+                },
+                "region": {
+                  "startLine": 21
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/restApi.spec.ts"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/restApi.spec.ts"
+                },
+                "region": {
+                  "startLine": 82
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/restApi.spec.ts"
+                },
+                "region": {
+                  "startLine": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/scoreBoard.spec.ts"
+                },
+                "region": {
+                  "startLine": 16
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/search.spec.ts"
+                },
+                "region": {
+                  "startLine": 56
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/search.spec.ts"
+                },
+                "region": {
+                  "startLine": 83
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-352",
+          "level": "warning",
+          "message": {
+            "text": "AJAX state-changing request (POST/PUT/DELETE) without a visible CSRF token header. Add X-CSRF-Token or X-Requested-With to requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/search.spec.ts"
+                },
+                "region": {
+                  "startLine": 116
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/totpSetup.spec.ts"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/totpSetup.spec.ts"
+                },
+                "region": {
+                  "startLine": 7
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-798",
+          "level": "warning",
+          "message": {
+            "text": "Hard-coded credential value in object property. Use environment variables or a secrets manager."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "C:/Users/juned/BobIDE/Project_AEGIS/src/test/cypress/e2e/totpSetup.spec.ts"
+                },
+                "region": {
+                  "startLine": 20
                 }
               }
             }

@@ -1,0 +1,5 @@
+[
+  "injection/dynamic-code-injection.py:8:CWE-95",
+  "python/print-password.py:4:CWE-359",
+  "src/data/static/codefixes/dbSchemaChallenge_1.ts:5:CWE-89"
+]

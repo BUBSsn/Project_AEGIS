@@ -1,0 +1,10 @@
+﻿# Cloned third-party repo workspaces — never commit
+workspaces/
+
+# Per-session SARIF outputs
+reports/sessions/
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/

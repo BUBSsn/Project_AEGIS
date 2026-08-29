@@ -1,5 +1,5 @@
 {
-  "chat_history_injection/dynamic-code-injection.py_8": [
+  "legacy::chat_history_injection/dynamic-code-injection.py_8": [
     {
       "role": "user",
       "content": "Hi bob"
@@ -17,7 +17,7 @@
       "content": "The file isn't in this workspace — it's from a different context. Based on the vulnerability details provided, here's the precise answer:\n\n**The problem is pinpointed at line 8**, where `eval()` is called. That's the exact line the scanner flagged (CWE-95). Whatever string is being passed into `eval()` on that line is the attack surface — if that string touches any user input, environment variable, or external data, an attacker can inject arbitrary Python code.\n\n**What to look for on that line:** a call shaped like `eval(some_variable)` or `eval(request.something)`. The fix is to replace it with [`ast.literal_eval()`](https://docs.python.org/3/library/ast.html#ast.literal_eval), which only parses safe Python literals (strings, numbers, lists, dicts) and raises a `ValueError` on anything else — no code execution possible.\n\n```python\n# ❌ Line 8 — vulnerable\nresult = eval(user_input)\n\n# ✅ Fixed\nimport ast\nresult = ast.literal_eval(user_input)\n```\n\nIf the value you're evaluating isn't a simple literal (e.g. it's a math expression or a command), `ast.literal_eval()` won't work for that use case — but `eval()` is still unsafe. In that case, use a purpose-built parser (e.g. `sympy` for math) instead of executing raw strings as code."
     }
   ],
-  "chat_history_src/data/static/codefixes/dbSchemaChallenge_1.ts_5": [
+  "legacy::chat_history_src/data/static/codefixes/dbSchemaChallenge_1.ts_5": [
     {
       "role": "user",
       "content": "What's the problem here and how does it affect the overall system"

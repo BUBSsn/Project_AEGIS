@@ -1,0 +1,20 @@
+[
+  {
+    "session_id": "526846fa-4cb3-4ebc-a895-4df0b3c1930b",
+    "repo_url": "https://github.com/jhundeniel/Arithmetic_Heroes",
+    "repo_name": "Arithmetic_Heroes",
+    "clone_dir": "workspaces/526846fa-4cb3-4ebc-a895-4df0b3c1930b",
+    "sarif_path": "reports/sessions/526846fa-4cb3-4ebc-a895-4df0b3c1930b.sarif",
+    "timestamp": "2026-08-29T20:56:43.125015+00:00",
+    "finding_count": 114
+  },
+  {
+    "session_id": "ccbc3fc6-b0b4-4156-9920-ac9686d51fb5",
+    "repo_url": "https://github.com/juice-shop/juice-shop.git",
+    "repo_name": "juice-shop.git",
+    "clone_dir": "workspaces/ccbc3fc6-b0b4-4156-9920-ac9686d51fb5",
+    "sarif_path": "reports/sessions/ccbc3fc6-b0b4-4156-9920-ac9686d51fb5.sarif",
+    "timestamp": "2026-08-29T20:58:29.322436+00:00",
+    "finding_count": 202
+  }
+]

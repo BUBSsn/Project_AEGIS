@@ -5,6 +5,8 @@ import shutil
 import subprocess
 import sys
 import time
+import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Optional
 
@@ -13,10 +15,18 @@ import streamlit as st
 # Make sure core/ is importable when running as `streamlit run app.py`
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from core.mcp_server import clone_github_repo, scan_ast_vulnerabilities
+from core.session_store import (
+    SESSIONS_PATH,
+    WORKSPACES_DIR,
+    add_session,
+    load_sessions,
+    get_session,
+)
 
-SARIF_PATH    = Path("reports/security-findings.sarif")
-BOOKMARKS_PATH = Path("reports/bookmarks.json")
-CHAT_PERSIST_PATH = Path("reports/chat_history.json")
+# ── Fixed paths (legacy single-session paths kept for backward compat) ────────
+SARIF_PATH         = Path("reports/security-findings.sarif")
+BOOKMARKS_PATH     = Path("reports/bookmarks.json")
+CHAT_PERSIST_PATH  = Path("reports/chat_history.json")
 
 # ── Bob Shell availability (resolved once at startup) ─────────────────────────
 _BOB_EXE     = shutil.which("bob")
@@ -70,6 +80,36 @@ def _save_chat_history(all_chats: dict) -> None:
     except OSError:
         pass
 
+
+def _chat_key(session_id: str, rel_path: str, line: int) -> str:
+    """Return a session-scoped chat key.
+
+    New format:  ``<session_id>::chat_history_<rel_path>_<line>``
+    Legacy format (no session prefix): ``chat_history_<rel_path>_<line>``
+
+    The legacy format is treated as belonging to the ``"legacy"`` pseudo-session
+    so it can still be loaded; no existing data is discarded.
+    """
+    return f"{session_id}::chat_history_{rel_path}_{line}"
+
+
+def _migrate_legacy_chats(all_chats: dict) -> dict:
+    """Namespace any bare (pre-session) chat keys under ``legacy::``.
+
+    Mutates and returns *all_chats*.  Safe to call repeatedly — keys that
+    already contain ``::`` are left untouched.
+    """
+    to_rename = [k for k in list(all_chats) if "::" not in k]
+    for old_key in to_rename:
+        new_key = f"legacy::{old_key}"
+        if new_key not in all_chats:
+            all_chats[new_key] = all_chats.pop(old_key)
+        else:
+            all_chats.pop(old_key)
+    return all_chats
+
+
+# ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="AEGIS: Automated Test & Security Hub",
     page_icon="🛡️",
@@ -114,12 +154,89 @@ st.markdown(
         0%   { background-position: -400px 0; }
         100% { background-position:  400px 0; }
     }
+
+    /* ── Session sidebar ── */
+    .session-item {
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid rgba(130,130,130,0.2);
+        margin-bottom: 6px;
+        cursor: pointer;
+        background-color: rgba(130,130,130,0.06);
+        font-size: 0.82rem;
+    }
+    .session-item-active {
+        border-color: rgba(59,130,212,0.6);
+        background-color: rgba(59,130,212,0.08);
+    }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
+# ── Session-state initialisation ──────────────────────────────────────────────
+# ``active_session_id`` holds the UUID of the session whose SARIF is currently
+# displayed.  ``None`` means "no session selected yet".
+if "active_session_id" not in st.session_state:
+    st.session_state["active_session_id"] = None
+if "last_scan_duration_secs" not in st.session_state:
+    st.session_state["last_scan_duration_secs"] = None
+
+# ── Sidebar: session list ─────────────────────────────────────────────────────
+with st.sidebar:
+    st.markdown("### 🗂️ Past Scans")
+    all_sessions = load_sessions()
+    # Show newest first
+    for sess in reversed(all_sessions):
+        sid    = sess.get("session_id", "")
+        rname  = sess.get("repo_name", sid)
+        ts_raw = sess.get("timestamp", "")
+        try:
+            ts_dt = datetime.fromisoformat(ts_raw)
+            ts_label = ts_dt.strftime("%Y-%m-%d %H:%M")
+        except (ValueError, TypeError):
+            ts_label = ts_raw[:16] if ts_raw else "—"
+        fcount = sess.get("finding_count", "?")
+        is_active = (sid == st.session_state["active_session_id"])
+        btn_style = "primary" if is_active else "secondary"
+        label = f"{'▶ ' if is_active else ''}{rname}\n{ts_label} · {fcount} findings"
+        if st.button(label, key=f"sess_btn_{sid}", use_container_width=True, type=btn_style):
+            if not is_active:
+                st.session_state["active_session_id"] = sid
+                # Invalidate stale per-run caches so the new session renders cleanly
+                st.session_state.pop("_chats_loaded", None)
+                st.session_state.pop("blame_cache", None)
+                st.session_state.pop("findings_page", None)
+                st.rerun()
+
+    if not all_sessions:
+        st.caption("No scans yet. Run a scan above to get started.")
+
+    st.markdown("---")
+    if st.session_state["active_session_id"] is not None:
+        st.caption(
+            f"Active: `{st.session_state['active_session_id'][:8]}…`"
+        )
+
+# ── Resolve active SARIF path ─────────────────────────────────────────────────
+# If a session is selected, use that session's SARIF; otherwise fall back to
+# the legacy fixed path so the app still works for pre-session scans.
+_active_session: Optional[dict] = None
+if st.session_state["active_session_id"] is not None:
+    _active_session = get_session(st.session_state["active_session_id"])
+
+if _active_session is not None:
+    _active_sarif_path = Path(_active_session["sarif_path"])
+else:
+    _active_sarif_path = SARIF_PATH
+
+# ── Page title ────────────────────────────────────────────────────────────────
 st.title("🛡️ AEGIS: Automated Test & Security Hub")
+if _active_session is not None:
+    st.markdown(
+        f"**Active scan:** `{_active_session['repo_url']}`  "
+        f"·  scanned {_active_session.get('timestamp', '')[:16]}"
+    )
 st.markdown("---")
 
 # ── Metric cards ──────────────────────────────────────────────────────────────
@@ -173,9 +290,9 @@ def _metric_card(col, label: str, value: str, sub: str = "") -> None:
 
 vuln_count = 0
 sarif_ready = False
-if SARIF_PATH.exists():
+if _active_sarif_path.exists():
     try:
-        sarif = json.loads(SARIF_PATH.read_text(encoding="utf-8"))
+        sarif = json.loads(_active_sarif_path.read_text(encoding="utf-8"))
         results = sarif.get("runs", [{}])[0].get("results", [])
         vuln_count = len(results)
         sarif_ready = True
@@ -250,9 +367,14 @@ if submitted:
     if not repo_url.strip():
         st.error("Please enter a GitHub repository URL.")
     else:
+        # Generate a fresh session id for this scan
+        new_session_id = str(uuid.uuid4())
+        clone_dir = f"workspaces/{new_session_id}"
+        sarif_rel  = f"reports/sessions/{new_session_id}.sarif"
+
         with st.status(f"Scanning `{repo_url}`…", expanded=True) as status:
             status.write(f"Cloning `{repo_url}`…")
-            clone_result = clone_github_repo(repo_url, target_dir="src")
+            clone_result = clone_github_repo(repo_url, target_dir=clone_dir)
 
             if clone_result.startswith("Clone failed"):
                 status.update(label="Clone failed", state="error", expanded=True)
@@ -262,14 +384,39 @@ if submitted:
                 status.write("Running AST security scan…")
                 _t0 = time.perf_counter()
                 scan_result = scan_ast_vulnerabilities(
-                    target_dir="src",
-                    output_sarif="reports/security-findings.sarif",
+                    target_dir=clone_dir,
+                    output_sarif=sarif_rel,
                 )
                 st.session_state["last_scan_duration_secs"] = time.perf_counter() - _t0
+
                 if scan_result.startswith("Scan Error"):
                     status.update(label="Scan failed", state="error", expanded=True)
                     st.error(scan_result)
                 else:
+                    # Count findings from the freshly written SARIF
+                    _new_sarif_path = Path(sarif_rel)
+                    _finding_count = 0
+                    try:
+                        _s = json.loads(_new_sarif_path.read_text(encoding="utf-8"))
+                        _finding_count = len(_s.get("runs", [{}])[0].get("results", []))
+                    except (json.JSONDecodeError, OSError, IndexError):
+                        pass
+
+                    # Register in the session store (caps + prunes automatically)
+                    add_session(
+                        session_id=new_session_id,
+                        repo_url=repo_url.strip(),
+                        clone_dir=clone_dir,
+                        sarif_path=sarif_rel,
+                        finding_count=_finding_count,
+                    )
+
+                    # Switch to the new session
+                    st.session_state["active_session_id"] = new_session_id
+                    st.session_state.pop("_chats_loaded", None)
+                    st.session_state.pop("blame_cache", None)
+                    st.session_state.pop("findings_page", None)
+
                     status.update(label="Scan complete", state="complete", expanded=False)
                     st.success("Scan complete.")
                     st.rerun()
@@ -281,23 +428,33 @@ _EXT_TO_LANG = {
     ".py": "python", ".java": "java", ".js": "javascript",
     ".ts": "typescript", ".php": "php", ".sql": "sql",
     ".rb": "ruby", ".cs": "csharp", ".cpp": "cpp",
-    ".c": "c", ".go": "go", ".ts": "typescript",
+    ".c": "c", ".go": "go",
 }
 
-def _rel_path(abs_uri: str) -> str:
+
+def _rel_path(abs_uri: str, clone_dir: Optional[str] = None) -> str:
     """Strip the local workspace prefix, returning a repo-relative path.
 
-    The SARIF exporter writes forward-slash absolute URIs.  We want the
-    portion starting from 'src/' (or whatever the scan root is named).
-    Falls back to the basename if the expected prefix is not found.
+    Handles both the legacy ``src/`` layout and the new
+    ``workspaces/<session_id>/`` layout.  Falls back to the basename if
+    neither prefix is found.
     """
-    # Normalise backslashes that may have survived the SARIF write
     clean = abs_uri.replace("\\", "/")
-    # Walk up from 'src/' — covers nested paths like .../Project_AEGIS/src/...
+
+    # Try session-specific workspaces/<id>/ prefix first
+    if clone_dir:
+        marker = "/" + clone_dir.replace("\\", "/").strip("/") + "/"
+        idx = clean.find(marker)
+        if idx != -1:
+            # Return path relative to the clone root (without leading slash)
+            return clean[idx + len(marker):]
+
+    # Legacy: walk up from 'src/' — covers nested paths like .../Project_AEGIS/src/...
     marker = "/src/"
     idx = clean.find(marker)
     if idx != -1:
         return "src" + clean[idx + len(marker) - 1:]
+
     # Fall back: just return the final two path components
     parts = [p for p in clean.split("/") if p]
     return "/".join(parts[-2:]) if len(parts) >= 2 else clean
@@ -488,7 +645,7 @@ def _code_snippet(abs_path: str, line: int, context: int = 2) -> Optional[str]:
 
 
 # ── Results table ─────────────────────────────────────────────────────────────
-if not SARIF_PATH.exists():
+if not _active_sarif_path.exists():
     # No scan yet — render skeleton placeholders using native Streamlit widgets
     # so each element is individually sized and the page scrolls normally.
     st.subheader("Security Findings")
@@ -515,11 +672,16 @@ if not SARIF_PATH.exists():
             _sk_bar(18, w)
             st.markdown("")
 
-elif SARIF_PATH.exists():
+elif _active_sarif_path.exists():
     st.subheader("Security Findings")
     try:
-        sarif = json.loads(SARIF_PATH.read_text())
+        sarif = json.loads(_active_sarif_path.read_text())
         results = sarif.get("runs", [{}])[0].get("results", [])
+
+        # Derive the clone_dir for _rel_path from the active session
+        _active_clone_dir: Optional[str] = (
+            _active_session.get("clone_dir") if _active_session else None
+        )
 
         rows = []
         for r in results:
@@ -541,7 +703,7 @@ elif SARIF_PATH.exists():
                 "message":  message,
                 "abs_path": abs_uri.replace("/", "\\") if sys.platform == "win32"
                             else abs_uri,
-                "rel_path": _rel_path(abs_uri),
+                "rel_path": _rel_path(abs_uri, _active_clone_dir),
                 "line":     line_num,
             })
 
@@ -552,9 +714,12 @@ elif SARIF_PATH.exists():
             if "bookmarks" not in st.session_state:
                 st.session_state["bookmarks"] = _load_bookmarks()
 
-            # ── Load persisted chat histories into session state once per run ─
+            # ── Load and migrate persisted chat histories once per session ────
             if "_chats_loaded" not in st.session_state:
                 persisted = _load_chat_history()
+                persisted = _migrate_legacy_chats(persisted)
+                # Write back migrated keys if anything changed
+                _save_chat_history(persisted)
                 for k, v in persisted.items():
                     if k not in st.session_state:
                         st.session_state[k] = v
@@ -663,6 +828,8 @@ elif SARIF_PATH.exists():
             if not filtered_rows:
                 st.info("No findings match the current filters.")
 
+            # Determine current session id for chat-key scoping
+            _cur_session_id = st.session_state.get("active_session_id") or "legacy"
 
             for row in page_rows:
                 emoji   = _severity_emoji(row["severity"])
@@ -787,7 +954,7 @@ elif SARIF_PATH.exists():
                             "`$env:BOBSHELL_API_KEY = \"<your-key>\"`"
                         )
                     else:
-                        chat_key = f"chat_history_{row['rel_path']}_{row['line']}"
+                        chat_key = _chat_key(_cur_session_id, row["rel_path"], row["line"])
                         if chat_key not in st.session_state:
                             st.session_state[chat_key] = []
 

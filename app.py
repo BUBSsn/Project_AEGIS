@@ -37,15 +37,21 @@ st.markdown(
         padding: 20px 24px;
         text-align: center;
     }
-    .metric-value { 
-        font-size: 2.4rem; 
-        font-weight: 700; 
+    .metric-value {
+        font-size: 2.4rem;
+        font-weight: 700;
         /* Let Streamlit dictate the text color */
     }
-    .metric-label { 
-        font-size: 0.85rem; 
-        margin-top: 4px; 
+    .metric-label {
+        font-size: 0.85rem;
+        margin-top: 4px;
         opacity: 0.7; /* Fades the text slightly based on the current theme color */
+    }
+
+    /* ── Skeleton shimmer (applied via inline style= on individual elements) ── */
+    @keyframes skeleton-shimmer {
+        0%   { background-position: -400px 0; }
+        100% { background-position:  400px 0; }
     }
     </style>
     """,
@@ -56,6 +62,34 @@ st.title("🛡️ AEGIS: Automated Test & Security Hub")
 st.markdown("---")
 
 # ── Metric cards ──────────────────────────────────────────────────────────────
+# Skeleton helpers — defined early so they're available for the metric cards
+# and the findings section below.
+_SK = (
+    'background:linear-gradient(90deg,'
+    'rgba(130,130,130,0.10) 25%,rgba(130,130,130,0.22) 50%,rgba(130,130,130,0.10) 75%);'
+    'background-size:400px 100%;'
+    'animation:skeleton-shimmer 1.4s ease-in-out infinite;'
+    'border-radius:5px;display:block;'
+)
+
+def _sk_bar(height: int = 16, width: str = "100%", extra: str = "") -> None:
+    """Render one shimmer bar as its own st.markdown block (correct iframe sizing)."""
+    st.markdown(
+        f'<div style="{_SK}height:{height}px;width:{width};{extra}"></div>',
+        unsafe_allow_html=True,
+    )
+
+def _sk_metric_col(col) -> None:
+    """Skeleton placeholder shaped like a metric card."""
+    col.markdown(
+        f'<div style="border:1px solid rgba(130,130,130,0.15);border-radius:8px;'
+        f'padding:20px 24px;text-align:center;">'
+        f'<div style="{_SK}height:36px;width:50%;margin:0 auto 10px;"></div>'
+        f'<div style="{_SK}height:14px;width:65%;margin:0 auto;"></div>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
 col1, col2, col3 = st.columns(3)
 
 def _metric_card(col, label: str, value: str) -> None:
@@ -68,17 +102,24 @@ def _metric_card(col, label: str, value: str) -> None:
     )
 
 vuln_count = 0
+sarif_ready = False
 if SARIF_PATH.exists():
     try:
         sarif = json.loads(SARIF_PATH.read_text())
         results = sarif.get("runs", [{}])[0].get("results", [])
         vuln_count = len(results)
+        sarif_ready = True
     except (json.JSONDecodeError, IndexError):
         pass
 
-_metric_card(col1, "Vulnerabilities Found", str(vuln_count))
-_metric_card(col2, "Security Gaps Detected", str(max(0, vuln_count - 1)))
-_metric_card(col3, "Est. Time Saved (hrs)", f"{vuln_count * 0.25:.1f}")
+if sarif_ready:
+    _metric_card(col1, "Vulnerabilities Found", str(vuln_count))
+    _metric_card(col2, "Security Gaps Detected", str(max(0, vuln_count - 1)))
+    _metric_card(col3, "Est. Time Saved (hrs)", f"{vuln_count * 0.25:.1f}")
+else:
+    _sk_metric_col(col1)
+    _sk_metric_col(col2)
+    _sk_metric_col(col3)
 
 st.markdown("---")
 
@@ -123,23 +164,27 @@ if submitted:
     if not repo_url.strip():
         st.error("Please enter a GitHub repository URL.")
     else:
-        with st.spinner(f"Cloning `{repo_url}`…"):
+        with st.status(f"Scanning `{repo_url}`…", expanded=True) as status:
+            status.write(f"Cloning `{repo_url}`…")
             clone_result = clone_github_repo(repo_url, target_dir="src")
 
-        if clone_result.startswith("Clone failed"):
-            st.error(clone_result)
-        else:
-            st.info(clone_result)
-            with st.spinner("Running AST security scan…"):
+            if clone_result.startswith("Clone failed"):
+                status.update(label="Clone failed", state="error", expanded=True)
+                st.error(clone_result)
+            else:
+                status.write(clone_result)
+                status.write("Running AST security scan…")
                 scan_result = scan_ast_vulnerabilities(
                     target_dir="src",
                     output_sarif="reports/security-findings.sarif",
                 )
-            if scan_result.startswith("Scan Error"):
-                st.error(scan_result)
-            else:
-                st.success("Scan complete.")
-                st.rerun()
+                if scan_result.startswith("Scan Error"):
+                    status.update(label="Scan failed", state="error", expanded=True)
+                    st.error(scan_result)
+                else:
+                    status.update(label="Scan complete", state="complete", expanded=False)
+                    st.success("Scan complete.")
+                    st.rerun()
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -274,15 +319,67 @@ _PROPOSED_SOLUTIONS: dict = {
     ),
 }
 
+_OFFICIAL_DOCS: dict = {
+    "CWE-89":  "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+    "CWE-78":  "https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html",
+    "CWE-798": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+    "CWE-295": "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html",
+    "CWE-327": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
+    "CWE-347": "https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html",
+    "CWE-601": "https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html",
+    "CWE-90":  "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html",
+    "CWE-117": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+    "CWE-359": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+    "CWE-312": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+    "CWE-502": "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
+    "CWE-79":  "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+    "CWE-352": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+    "CWE-611": "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html",
+    "CWE-95":  "https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html",
+    # CWE-94 (SSTI) and CWE-22 (Path Traversal) have no dedicated OWASP cheat sheet —
+    # deliberately omitted so they fall through to the MITRE CWE-definition fallback.
+}
+
+
+def _blame_authors(abs_path: str) -> dict:
+    """Return {line_number: author_name} for a git-tracked file, or {} if unavailable."""
+    try:
+        result = subprocess.run(
+            ["git", "blame", "--porcelain", abs_path],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            cwd=str(Path(abs_path).resolve().parent),
+        )
+        if result.returncode != 0:
+            return {}
+        authors: dict = {}
+        current_line: Optional[int] = None
+        current_author: Optional[str] = None
+        for line in result.stdout.splitlines():
+            if line and line[0].isalnum() and len(line.split()[0]) == 40:  # commit hash
+                parts = line.split()
+                current_line = int(parts[2])
+            elif line.startswith("author "):
+                current_author = line[len("author "):]
+            elif line.startswith("\t") and current_line is not None:
+                authors[current_line] = current_author or "Unknown"
+        return authors
+    except (OSError, ValueError):
+        return {}
+
 
 def _proposed_solution(rule_id: str) -> str:
     """Return the static Markdown-formatted proposed fix for the given rule ID."""
-    return _PROPOSED_SOLUTIONS.get(
+    solution_text = _PROPOSED_SOLUTIONS.get(
         rule_id,
         f"Review the flagged code and consult the [{rule_id} CWE entry]"
         f"(https://cwe.mitre.org/data/definitions/{rule_id.replace('CWE-', '')}.html)"
         f" for remediation guidance.",
     )
+    doc_url = _OFFICIAL_DOCS.get(
+        rule_id,
+        f"https://cwe.mitre.org/data/definitions/{rule_id.replace('CWE-', '')}.html",
+    )
+    return solution_text + f"\n\n📖 [Official documentation]({doc_url})"
 
 
 def _code_snippet(abs_path: str, line: int, context: int = 2) -> Optional[str]:
@@ -303,7 +400,34 @@ def _code_snippet(abs_path: str, line: int, context: int = 2) -> Optional[str]:
 
 
 # ── Results table ─────────────────────────────────────────────────────────────
-if SARIF_PATH.exists():
+if not SARIF_PATH.exists():
+    # No scan yet — render skeleton placeholders using native Streamlit widgets
+    # so each element is individually sized and the page scrolls normally.
+    st.subheader("Security Findings")
+
+    # Table header row
+    th = st.columns([1, 2, 2, 5, 1, 2])
+    for col in th:
+        with col:
+            _sk_bar(12)
+    st.markdown("")
+
+    # Table body rows
+    for _ in range(8):
+        tr = st.columns([1, 2, 2, 5, 1, 2])
+        for i, col in enumerate(tr):
+            with col:
+                _sk_bar(14)
+
+    st.markdown("---")
+
+    # Expander card skeletons
+    for w in ["60%", "75%", "50%", "68%", "55%", "72%", "45%", "63%"]:
+        with st.container():
+            _sk_bar(18, w)
+            st.markdown("")
+
+elif SARIF_PATH.exists():
     st.subheader("Security Findings")
     try:
         sarif = json.loads(SARIF_PATH.read_text())
@@ -371,29 +495,6 @@ if SARIF_PATH.exists():
             )
 
             # ── 2. Summary dataframe (quick overview, no horizontal scroll) ──
-            summary_rows = [
-                {
-                    "Sev": _severity_emoji(row["severity"]),
-                    "Rule ID":  row["rule_id"],
-                    "Severity": row["severity"].capitalize(),
-                    "File":     row["rel_path"],
-                    "Line":     row["line"],
-                }
-                for row in filtered_rows
-            ]
-            st.dataframe(
-                summary_rows,
-                use_container_width=True,
-                column_config={
-                    "Sev":      st.column_config.TextColumn("",      width=40),
-                    "Rule ID":  st.column_config.TextColumn("Rule",  width=120),
-                    "Severity": st.column_config.TextColumn("Sev.",  width=90),
-                    "File":     st.column_config.TextColumn("File",  width=340),
-                    "Line":     st.column_config.NumberColumn("Line", width=60),
-                },
-                hide_index=True,
-            )
-
             PAGE_SIZE = 20
             total_pages = max(1, math.ceil(len(filtered_rows) / PAGE_SIZE))
             st.session_state.setdefault("findings_page", 1)
@@ -403,6 +504,39 @@ if SARIF_PATH.exists():
             current_page = st.session_state["findings_page"]
             start = (current_page - 1) * PAGE_SIZE
             page_rows = filtered_rows[start : start + PAGE_SIZE]
+
+            # Batched git-blame: resolve all unique files in filtered_rows (for the
+            # full table) plus the current page (for the cards). Already-cached files
+            # are skipped so page navigation never re-runs blame.
+            st.session_state.setdefault("blame_cache", {})
+            for f in {row["abs_path"] for row in filtered_rows}:
+                if f not in st.session_state["blame_cache"]:
+                    st.session_state["blame_cache"][f] = _blame_authors(f)
+
+            summary_rows = [
+                {
+                    "Sev":      _severity_emoji(row["severity"]),
+                    "Rule ID":  row["rule_id"],
+                    "Severity": row["severity"].capitalize(),
+                    "File":     row["rel_path"],
+                    "Line":     row["line"],
+                    "Author":   st.session_state["blame_cache"].get(row["abs_path"], {}).get(row["line"], "Unknown"),
+                }
+                for row in filtered_rows
+            ]
+            st.dataframe(
+                summary_rows,
+                use_container_width=True,
+                column_config={
+                    "Sev":      st.column_config.TextColumn("",       width=28),
+                    "Rule ID":  st.column_config.TextColumn("Rule",   width=120),
+                    "Severity": st.column_config.TextColumn("Sev.",   width=90),
+                    "File":     st.column_config.TextColumn("File",   width=310),
+                    "Line":     st.column_config.NumberColumn("Line", width=60),
+                    "Author":   st.column_config.TextColumn("Author", width=110),
+                },
+                hide_index=True,
+            )
 
             if len(filtered_rows) != len(rows):
                 st.markdown(
@@ -433,9 +567,11 @@ if SARIF_PATH.exists():
                     # Metadata block
                     c1, c2 = st.columns([1, 3])
                     with c1:
+                        author = st.session_state["blame_cache"].get(row["abs_path"], {}).get(row["line"], "Unknown")
                         st.markdown(f"**Rule ID**\n\n`{row['rule_id']}`")
                         st.markdown(f"**Severity**\n\n{emoji} {row['severity'].capitalize()}")
                         st.markdown(f"**Line**\n\n`{row['line']}`")
+                        st.markdown(f"**Author**\n\n`{author}`")
                     with c2:
                         st.markdown("**Description**")
                         st.markdown(row["message"])

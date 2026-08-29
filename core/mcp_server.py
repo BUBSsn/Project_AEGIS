@@ -1,7 +1,12 @@
+import re
 import subprocess
 import os
 import sys
+import stat
+import shutil
 from pathlib import Path
+
+import git
 
 # Ensure project root is on sys.path for module imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -43,6 +48,41 @@ def run_critic_test_verification(test_dir: str = "tests") -> str:
     if proc.returncode == 0:
         return "CRITIC_VERIFICATION_PASSED: All tests passed with zero regressions."
     return f"CRITIC_VERIFICATION_FAILED:\n{proc.stdout}\n{proc.stderr}"
+
+
+def _force_rmtree(path: Path) -> None:
+    """Remove a directory tree, clearing read-only flags on Windows before deletion."""
+    def _on_error(func, fpath, exc_info):
+        # Clear the read-only bit and retry
+        os.chmod(fpath, stat.S_IWRITE)
+        func(fpath)
+
+    shutil.rmtree(path, onerror=_on_error)
+
+
+def _normalize_github_url(url: str) -> str:
+    """Strip /tree/<ref>/... or /blob/<ref>/... suffixes from a GitHub URL so
+    that the result is a valid git-cloneable repository root URL."""
+    return re.sub(r"/(tree|blob)/[^/]+(/.*)?$", "", url.rstrip("/"))
+
+
+@mcp.tool()
+def clone_github_repo(repo_url: str, target_dir: str = "src") -> str:
+    """Clones a remote GitHub repository into the local target directory, clearing it first if it exists."""
+    normalized = _normalize_github_url(repo_url)
+    abs_target = PROJECT_ROOT / target_dir
+    if abs_target.exists():
+        _force_rmtree(abs_target)
+    abs_target.mkdir(parents=True, exist_ok=True)
+
+    try:
+        git.Repo.clone_from(normalized, str(abs_target))
+        msg = f"Clone successful: '{normalized}' cloned into '{target_dir}'."
+        if normalized != repo_url:
+            msg += f" (URL normalized from '{repo_url}')"
+        return msg
+    except git.exc.GitCommandError as e:
+        return f"Clone failed: {e}"
 
 
 @mcp.tool()

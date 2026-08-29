@@ -1,6 +1,7 @@
 import json
 import sys
 from pathlib import Path
+from typing import List, Optional
 
 import streamlit as st
 
@@ -132,6 +133,155 @@ if submitted:
                 st.success("Scan complete.")
                 st.rerun()
 
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+# Map file extension → language identifier for st.code()
+_EXT_TO_LANG = {
+    ".py": "python", ".java": "java", ".js": "javascript",
+    ".ts": "typescript", ".php": "php", ".sql": "sql",
+    ".rb": "ruby", ".cs": "csharp", ".cpp": "cpp",
+    ".c": "c", ".go": "go", ".ts": "typescript",
+}
+
+def _rel_path(abs_uri: str) -> str:
+    """Strip the local workspace prefix, returning a repo-relative path.
+
+    The SARIF exporter writes forward-slash absolute URIs.  We want the
+    portion starting from 'src/' (or whatever the scan root is named).
+    Falls back to the basename if the expected prefix is not found.
+    """
+    # Normalise backslashes that may have survived the SARIF write
+    clean = abs_uri.replace("\\", "/")
+    # Walk up from 'src/' — covers nested paths like .../Project_AEGIS/src/...
+    marker = "/src/"
+    idx = clean.find(marker)
+    if idx != -1:
+        return "src" + clean[idx + len(marker) - 1:]
+    # Fall back: just return the final two path components
+    parts = [p for p in clean.split("/") if p]
+    return "/".join(parts[-2:]) if len(parts) >= 2 else clean
+
+
+def _severity_emoji(severity: str) -> str:
+    """Return a colour-coded emoji for a SARIF severity level."""
+    return {"error": "🔴", "critical": "🔴", "warning": "🟡", "note": "🔵"}.get(
+        severity.lower(), "⚪"
+    )
+
+
+_PROPOSED_SOLUTIONS: dict = {
+    "CWE-89":  (
+        "**SQL Injection** — Replace string concatenation / f-string queries with "
+        "parameterised queries:\n"
+        "```python\n"
+        "# ❌  cursor.execute(f\"SELECT * FROM t WHERE id = '{val}'\")\n"
+        "# ✅  cursor.execute(\"SELECT * FROM t WHERE id = ?\", (val,))\n"
+        "```"
+    ),
+    "CWE-78":  (
+        "**OS Command Injection** — Avoid `shell=True` and never pass unsanitised "
+        "input to subprocess calls. Pass arguments as a list instead:\n"
+        "```python\n"
+        "# ❌  subprocess.run(f\"ls {user_input}\", shell=True)\n"
+        "# ✅  subprocess.run([\"ls\", user_input])\n"
+        "```"
+    ),
+    "CWE-95":  (
+        "**Dynamic Code Execution** — Remove `eval()` / `exec()`. Use "
+        "`ast.literal_eval()` for safe value parsing, or redesign to avoid "
+        "dynamic evaluation entirely."
+    ),
+    "CWE-798": (
+        "**Hardcoded Credentials** — Move secrets to environment variables or a "
+        "secrets manager:\n"
+        "```python\n"
+        "# ❌  API_KEY = \"AbCdEf123456...\"\n"
+        "# ✅  API_KEY = os.getenv(\"API_KEY\")\n"
+        "```"
+    ),
+    "CWE-295": (
+        "**Improper Certificate Validation** — Never disable TLS verification. "
+        "Remove `check_hostname = False` / `verify_mode = CERT_NONE` and ensure "
+        "a valid CA bundle is used:\n"
+        "```python\n"
+        "# ❌  ctx.check_hostname = False; ctx.verify_mode = ssl.CERT_NONE\n"
+        "# ✅  ctx = ssl.create_default_context()\n"
+        "```"
+    ),
+    "CWE-327": (
+        "**Weak Cryptographic Algorithm** — Replace MD5 / SHA-1 / DES / RC4 with "
+        "a modern algorithm:\n"
+        "```python\n"
+        "# ❌  hashlib.md5(data).hexdigest()\n"
+        "# ✅  hashlib.sha256(data).hexdigest()\n"
+        "```"
+    ),
+    "CWE-347": (
+        "**Improper JWT Verification** — Always verify the signature and enforce "
+        "the expected algorithm. Never use `algorithms=[\"none\"]` or skip "
+        "`verify_signature`:\n"
+        "```python\n"
+        "# ❌  jwt.decode(token, options={\"verify_signature\": False})\n"
+        "# ✅  jwt.decode(token, SECRET, algorithms=[\"HS256\"])\n"
+        "```"
+    ),
+    "CWE-94":  (
+        "**Server-Side Template Injection** — Never render user-supplied strings "
+        "as templates. Pass data as template variables instead:\n"
+        "```python\n"
+        "# ❌  env.from_string(user_input).render()\n"
+        "# ✅  env.get_template(\"safe.html\").render(data=user_input)\n"
+        "```"
+    ),
+    "CWE-601": (
+        "**Open Redirect** — Validate redirect destinations against an allowlist "
+        "of trusted URLs before issuing the redirect."
+    ),
+    "CWE-90":  (
+        "**LDAP Injection** — Escape all user-supplied values with an LDAP-safe "
+        "encoding function before incorporating them into filter strings."
+    ),
+    "CWE-117": (
+        "**Log Injection** — Sanitise log messages by stripping or escaping "
+        "newline characters (`\\n`, `\\r`) from untrusted input before logging."
+    ),
+    "CWE-359": (
+        "**Sensitive Information Exposure** — Remove `print()` / logging calls "
+        "that output PII, credentials, or internal state to stdout/logs."
+    ),
+    "CWE-502": (
+        "**Unsafe Deserialization** — Avoid `pickle`, `ObjectInputStream`, or "
+        "other formats that execute code on load. Use JSON or another "
+        "data-only format with schema validation."
+    ),
+}
+
+
+def _proposed_solution(rule_id: str) -> str:
+    """Return a Markdown-formatted proposed fix for the given rule ID."""
+    return _PROPOSED_SOLUTIONS.get(
+        rule_id,
+        f"Review the flagged code and consult the [{rule_id} CWE entry](https://cwe.mitre.org/data/definitions/{rule_id.replace('CWE-', '')}.html) for remediation guidance.",
+    )
+
+
+def _code_snippet(abs_path: str, line: int, context: int = 2) -> Optional[str]:
+    """Read *abs_path* and return *context* lines either side of *line*.
+
+    Returns None if the file cannot be opened (e.g. deleted after scan).
+    """
+    try:
+        p = Path(abs_path)
+        if not p.exists():
+            return None
+        all_lines = p.read_text(encoding="utf-8", errors="replace").splitlines()
+        start = max(0, line - 1 - context)
+        end = min(len(all_lines), line + context)
+        return "\n".join(all_lines[start:end])
+    except OSError:
+        return None
+
+
 # ── Results table ─────────────────────────────────────────────────────────────
 if SARIF_PATH.exists():
     st.subheader("Security Findings")
@@ -141,38 +291,87 @@ if SARIF_PATH.exists():
 
         rows = []
         for r in results:
-            rule_id = r.get("ruleId", "—")
-            message = r.get("message", {}).get("text", "—")
+            rule_id  = r.get("ruleId", "—")
+            # Severity is written directly onto each result as `level`
+            severity = r.get("level", "warning")
+            message  = r.get("message", {}).get("text", "—")
             locations = r.get("locations", [])
             if locations:
-                phys = locations[0].get("physicalLocation", {})
-                file_path = phys.get("artifactLocation", {}).get("uri", "—")
-                line = phys.get("region", {}).get("startLine", "—")
+                phys      = locations[0].get("physicalLocation", {})
+                abs_uri   = phys.get("artifactLocation", {}).get("uri", "")
+                line_num  = phys.get("region", {}).get("startLine", 0)
             else:
-                file_path, line = "—", "—"
-
-            # Severity lives on the rule definition; default to "warning"
-            rules = sarif.get("runs", [{}])[0].get("tool", {}).get("driver", {}).get("rules", [])
-            severity = "warning"
-            for rule in rules:
-                if rule.get("id") == rule_id:
-                    severity = (
-                        rule.get("defaultConfiguration", {}).get("level", "warning")
-                    )
-                    break
+                abs_uri, line_num = "", 0
 
             rows.append({
-                "Rule ID": rule_id,
-                "Severity": severity,
-                "Message": message,
-                "File": file_path,
-                "Line": line,
+                "rule_id":  rule_id,
+                "severity": severity,
+                "message":  message,
+                "abs_path": abs_uri.replace("/", "\\") if sys.platform == "win32"
+                            else abs_uri,
+                "rel_path": _rel_path(abs_uri),
+                "line":     line_num,
             })
 
-        if rows:
-            st.dataframe(rows, use_container_width=True)
-        else:
+        if not rows:
             st.info("No vulnerabilities found in the last scan.")
+        else:
+            # ── 1. Summary dataframe (quick overview, no horizontal scroll) ──
+            summary_rows = [
+                {
+                    "Sev": _severity_emoji(row["severity"]),
+                    "Rule ID":  row["rule_id"],
+                    "Severity": row["severity"].capitalize(),
+                    "File":     row["rel_path"],
+                    "Line":     row["line"],
+                }
+                for row in rows
+            ]
+            st.dataframe(
+                summary_rows,
+                use_container_width=True,
+                column_config={
+                    "Sev":      st.column_config.TextColumn("",      width=40),
+                    "Rule ID":  st.column_config.TextColumn("Rule",  width=120),
+                    "Severity": st.column_config.TextColumn("Sev.",  width=90),
+                    "File":     st.column_config.TextColumn("File",  width=340),
+                    "Line":     st.column_config.NumberColumn("Line", width=60),
+                },
+                hide_index=True,
+            )
+
+            st.markdown(f"**{len(rows)} finding{'s' if len(rows) != 1 else ''} — expand a card for detail and source context.**")
+            st.markdown("")
+
+            # ── 2. Per-finding expander cards ────────────────────────────────
+            for row in rows:
+                emoji   = _severity_emoji(row["severity"])
+                label   = f"{emoji} {row['rel_path']}  (Line {row['line']})"
+                ext     = Path(row["rel_path"]).suffix.lower()
+                lang    = _EXT_TO_LANG.get(ext, "text")
+
+                with st.expander(label, expanded=False):
+                    # Metadata block
+                    c1, c2 = st.columns([1, 3])
+                    with c1:
+                        st.markdown(f"**Rule ID**\n\n`{row['rule_id']}`")
+                        st.markdown(f"**Severity**\n\n{emoji} {row['severity'].capitalize()}")
+                        st.markdown(f"**Line**\n\n`{row['line']}`")
+                    with c2:
+                        st.markdown("**Description**")
+                        st.markdown(row["message"])
+
+                    # Source code snippet
+                    snippet = _code_snippet(row["abs_path"], row["line"])
+                    if snippet:
+                        st.markdown("**Source context**")
+                        st.code(snippet, language=lang, line_numbers=False)
+                    else:
+                        st.caption("_Source file not available for preview._")
+
+                    # Proposed solution
+                    st.markdown("**Proposed solution**")
+                    st.markdown(_proposed_solution(row["rule_id"]))
 
     except (json.JSONDecodeError, KeyError, IndexError) as exc:
         st.error(f"Could not parse SARIF report: {exc}")

@@ -1,0 +1,44 @@
+{
+  "onSkillUse": {
+    "HEAL":              ["Hold still!", "Patching you up!", "Stay with me!"],
+    "GROUP_HEAL":        ["Everyone, gather around!", "Healing wave!"],
+    "POKE":              ["Take this!", "Jab!", "Quick strike!"],
+    "SLAM":              ["INCOMING!", "Feel the impact!", "Ground pound!"],
+    "AMPLIFY":           ["Power up!", "Let's multiply your strength!"],
+    "GROUP_AMPLIFY":     ["Everyone gets a boost!", "Full party power!"],
+    "BURDEN":            ["I'll protect you!", "Stay behind me.", "Shield up!"],
+    "GROUP_BURDEN":      ["I've got everyone covered!", "Formation!"],
+    "INVERSION":         ["Let's flip the script!", "Inverting..."],
+    "SQUARED_POWER":     ["Double cast incoming!", "SQUARED!"],
+    "COST_REDUCTION":    ["Discounted!", "Half price special!"],
+    "SINGLE_DRAIN":      ["Draining your energy!", "Give me your strength!"],
+    "LIFE_SIPHON":       ["Life force... MINE!", "Siphoning everyone!"],
+    "LIFESTEAL_ATTACK":  ["Your life is my fuel!", "Absorbing!"],
+    "CONDITIONAL_ATTACK":["NOW! While I still can!", "Desperation strike!"],
+    "SINGLE_REFLECTION": ["Try hitting me now!", "Mirror shield!"],
+    "GROUP_REFLECTION":  ["Reflect everything!", "Shields up, team!"],
+    "ADDITIONAL_BUFF":   ["Here, take this bonus!", "Extra power for you!"],
+    "MANA_TRANSFER":     ["Sharing my energy!", "Take my mana!"],
+    "BATTLE_EQUALIZER":  ["Let's balance things out.", "Equalizing..."]
+  },
+
+  "onLowHP": {
+    "Addition":      ["I can still fight...!", "Just a scratch!"],
+    "Subtraction":   ["Pain is fuel.", "Is that all you've got?"],
+    "Multiplication":["Not... done... yet!", "I'll multiply my effort!"],
+    "Division":      ["I need to be more efficient...", "Splitting the difference..."]
+  },
+
+  "onVictory": {
+    "Addition":      ["We did it!", "Math saves the day!"],
+    "Subtraction":   ["Hmph. Easy.", "Next."],
+    "Multiplication":["That was exponentially satisfying!", "GG!"],
+    "Division":      ["Divided and conquered.", "Efficient as always."]
+  },
+
+  "onEnemyAttack": {
+    "ENEMY_ATTACK":     ["Foolish operators!", "Take THIS!"],
+    "ENEMY_AOE_ATTACK": ["EVERYONE SUFFERS!", "Area attack!"],
+    "ENEMY_SUPPORT_BUFF":["Powering up!", "You can't stop me!"]
+  }
+}

@@ -1,0 +1,33 @@
+{
+"slotId": "run_1775297902992",
+"displayName": "Run 2",
+"timestamp": 1775298176602,
+"currentStageIndex": 3,
+"currentRound": 1,
+"midBattle": true,
+"heroes": {
+	"class": "java.util.HashMap",
+	"HERO_MULTIPLICATION": {
+		"hp": 35,
+		"mana": 30
+	},
+	"HERO_ADDITION": {
+		"hp": 45,
+		"mana": 40
+	},
+	"HERO_DIVISION": {
+		"hp": 65,
+		"mana": 40
+	},
+	"HERO_SUBTRACTION": {
+		"hp": 35,
+		"mana": 20
+	}
+},
+"enemies": [
+	{
+		"enemyKey": "ENEMY_MOB1",
+		"hp": 55
+	}
+]
+}

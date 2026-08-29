@@ -1,0 +1,96 @@
+{
+  "enemies": [
+    {
+      "comment": "=== MOBS ===",
+      "key": "ENEMY_MOB1",
+      "name": "Cal",
+      "maxHp": 55,
+      "operatorType": "MOB",
+      "skills": [
+        "ENEMY_BASIC",
+        "ENEMY_AOE"
+      ]
+    },
+    {
+      "key": "ENEMY_MOB2",
+      "name": "Nora",
+      "maxHp": 80,
+      "operatorType": "MOB",
+      "skills": [
+        "ENEMY_BASIC",
+        "ENEMY_SELF_BUFF"
+      ]
+    },
+    {
+      "key": "ENEMY_MOB3",
+      "name": "Cross",
+      "maxHp": 50,
+      "operatorType": "MOB",
+      "skills": [
+        "ENEMY_BASIC",
+        "ENEMY_AOE",
+        "ENEMY_SELF_BUFF"
+      ]
+    },
+    {
+      "key": "ENEMY_MOB4",
+      "name": "Baldo",
+      "maxHp": 45,
+      "operatorType": "MOB",
+      "skills": [
+        "ENEMY_BASIC",
+        "ENEMY_SINGLE_HEAL"
+      ]
+    },
+    {
+      "key": "ENEMY_MOB5",
+      "name": "Specs",
+      "maxHp": 60,
+      "operatorType": "MOB",
+      "skills": [
+        "ENEMY_BASIC",
+        "ENEMY_AOE",
+        "ENEMY_SELF_BUFF"
+      ]
+    },
+    {
+      "comment": "=== BOSSES ===",
+      "key": "ENEMY_BOSS1",
+      "name": "Prof. Minus",
+      "maxHp": 160,
+      "operatorType": "MOB",
+      "passiveKey": "PASSIVE_PARITY_SHIELD",
+      "skills": [
+        "ENEMY_BASIC",
+        "ENEMY_AOE",
+        "ENEMY_SELF_BUFF"
+      ]
+    },
+    {
+      "key": "ENEMY_BOSS2",
+      "name": "Lady Sigma",
+      "maxHp": 220,
+      "operatorType": "MOB",
+      "passiveKey": "PASSIVE_INVERSE_REALITY",
+      "skills": [
+        "ENEMY_BASIC",
+        "ENEMY_AOE",
+        "ENEMY_SINGLE_HEAL",
+        "ENEMY_SELF_BUFF"
+      ]
+    },
+    {
+      "key": "ENEMY_BOSS3",
+      "name": "Dr. Infinitum",
+      "maxHp": 300,
+      "operatorType": "MOB",
+      "passiveKey": "PASSIVE_FINAL_EQUATION",
+      "skills": [
+        "ENEMY_BASIC",
+        "ENEMY_AOE",
+        "ENEMY_SINGLE_HEAL",
+        "ENEMY_SELF_BUFF"
+      ]
+    }
+  ]
+}

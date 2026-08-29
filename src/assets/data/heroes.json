@@ -1,0 +1,70 @@
+{
+  "heroes": [
+    {
+      "key": "HERO_ADDITION",
+      "name": "Addition",
+      "maxHp": 45,
+      "maxMana": 40,
+      "operatorType": "ADDITION",
+      "passiveKey": "ADDITION_PASSIVE",
+      "skills": [
+        "ADD_HEAL",
+        "ADD_GROUP_HEAL",
+        "ADD_BUFF",
+        "ADD_MANA",
+        "ADD_DRAIN",
+        "ADD_LIFE_SIPHON",
+        "ADD_MANA_STEAL"
+      ]
+    },
+    {
+      "key": "HERO_SUBTRACTION",
+      "name": "Subtraction",
+      "maxHp": 35,
+      "maxMana": 20,
+      "operatorType": "SUBTRACTION",
+      "passiveKey": "SUBTRACTION_PASSIVE",
+      "skills": [
+        "SUB_POKE",
+        "SUB_SLAM",
+        "SUB_CONDITIONAL",
+        "SUB_LIFESTEAL",
+        "SUB_BLOOD_TRANSFER",
+        "SUB_SACRIFICE",
+        "SUB_MANA_NUKE",
+        "SUB_DEBT_TRANSFER"
+      ]
+    },
+    {
+      "key": "HERO_MULTIPLICATION",
+      "name": "Multiplication",
+      "maxHp": 35,
+      "maxMana": 30,
+      "operatorType": "MULTIPLICATION",
+      "passiveKey": "MULTIPLICATION_PASSIVE",
+      "skills": [
+        "MULT_AMPLIFY",
+        "MULT_GROUP_AMPLIFY",
+        "MULT_INVERSION",
+        "MULT_SQUARED_POWER"
+      ]
+    },
+    {
+      "key": "HERO_DIVISION",
+      "name": "Division",
+      "maxHp": 65,
+      "maxMana": 40,
+      "operatorType": "DIVISION",
+      "passiveKey": "DIVISION_PASSIVE",
+      "skills": [
+        "DIV_BURDEN",
+        "DIV_GROUP_BURDEN",
+        "DIV_COST_REDUCTION",
+        "DIV_BATTLE_EQUALIZER",
+        "DIV_SINGLE_REFLECTION",
+        "DIV_GROUP_REFLECTION",
+        "DIV_UNFAIR_BATTLE"
+      ]
+    }
+  ]
+}

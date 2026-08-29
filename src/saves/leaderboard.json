@@ -1,0 +1,18 @@
+{
+"entries": [
+	{
+		"playerName": "JSJ",
+		"score": 11111,
+		"stagesCleared": 11,
+		"heroesAlive": 4,
+		"timestamp": 1775333445263
+	},
+	{
+		"playerName": "NNN",
+		"score": 10000,
+		"stagesCleared": 9,
+		"heroesAlive": 4,
+		"timestamp": 1775331892196
+	}
+]
+}

@@ -1,4 +1,7 @@
 import json
+import os
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 from typing import List, Optional
@@ -10,6 +13,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from core.mcp_server import clone_github_repo, scan_ast_vulnerabilities
 
 SARIF_PATH = Path("reports/security-findings.sarif")
+
+# ── Bob Shell availability (resolved once at startup) ─────────────────────────
+_BOB_EXE     = shutil.which("bob")
+_BOB_API_KEY = os.environ.get("BOBSHELL_API_KEY", "")
 
 st.set_page_config(
     page_title="AEGIS: Automated Test & Security Hub",
@@ -168,6 +175,18 @@ def _severity_emoji(severity: str) -> str:
         severity.lower(), "⚪"
     )
 
+
+# ── Security-expert skill instructions (prepended to every Bob chat query) ────
+_SKILL_PREAMBLE = (
+    "You are a senior application security engineer answering a developer's "
+    "question about a specific code vulnerability. "
+    "Keep your answers concise, direct, and limited to 2-3 short paragraphs. "
+    "Avoid using jargon where possible, or clearly define it if necessary. "
+    "If proposing a code fix, always output the corrected code in a properly "
+    "formatted Markdown block. "
+    "Do not hallucinate file names or line numbers; refer strictly to the "
+    "context provided in the prompt."
+)
 
 _PROPOSED_SOLUTIONS: dict = {
     "CWE-89":  (
@@ -372,6 +391,99 @@ if SARIF_PATH.exists():
                     # Proposed solution
                     st.markdown("**Proposed solution**")
                     st.markdown(_proposed_solution(row["rule_id"]))
+
+                    # ── Chat with Bob ─────────────────────────────────────────
+                    st.divider()
+                    st.markdown("##### 💬 Ask Bob about this vulnerability")
+
+                    if not _BOB_EXE:
+                        st.caption(
+                            "⚠️ Bob Shell is not installed or not on PATH. "
+                            "Install it with: "
+                            "`powershell -ep Bypass 'irm -Uri \"https://bob.ibm.com/download/bobshell.ps1\" | iex'`"
+                        )
+                    elif not _BOB_API_KEY:
+                        st.caption(
+                            "⚠️ `BOBSHELL_API_KEY` environment variable is not set. "
+                            "Add it to your shell profile or restart Streamlit after running: "
+                            "`$env:BOBSHELL_API_KEY = \"<your-key>\"`"
+                        )
+                    else:
+                        chat_key = f"chat_history_{row['rel_path']}_{row['line']}"
+                        if chat_key not in st.session_state:
+                            st.session_state[chat_key] = []
+
+                        # Render existing messages
+                        for msg in st.session_state[chat_key]:
+                            with st.chat_message(msg["role"]):
+                                st.markdown(msg["content"])
+
+                        # Hidden system context injected into every query.
+                        # Question leads so Bob answers it directly; persona
+                        # and vulnerability context follow as grounding.
+                        def _build_prompt(question: str) -> str:
+                            return (
+                                f"{question}\n\n"
+                                f"---\n"
+                                f"CONTEXT (use this to ground your answer):\n"
+                                f"{_SKILL_PREAMBLE}\n\n"
+                                f"VULNERABILITY DETAILS:\n"
+                                f"- Rule ID: {row['rule_id']}\n"
+                                f"- File: {row['rel_path']}\n"
+                                f"- Line: {row['line']}\n"
+                                f"- Description: {row['message']}\n"
+                                f"- Source snippet:\n```\n{snippet or '(not available)'}\n```"
+                            )
+
+                        user_input = st.chat_input(
+                            "Ask a question about this finding…",
+                            key=f"chat_input_{row['rel_path']}_{row['line']}",
+                        )
+
+                        if user_input:
+                            combined_query = _build_prompt(user_input)
+
+                            st.session_state[chat_key].append(
+                                {"role": "user", "content": user_input}
+                            )
+
+                            with st.spinner("Bob is thinking…"):
+                                result = subprocess.run(
+                                    [
+                                        _BOB_EXE, "run",
+                                        "--mode", "ask",
+                                        "--disable-mcp",
+                                        "--disable-subagents",
+                                        "--format", "json",
+                                        combined_query,
+                                    ],
+                                    capture_output=True,
+                                    text=True,
+                                    env={**os.environ, "BOBSHELL_API_KEY": _BOB_API_KEY},
+                                    cwd=str(Path(__file__).resolve().parent),
+                                )
+
+                            # Extract the assistant's text from the JSON output;
+                            # fall back to raw stdout if parsing fails.
+                            response = "_(No response returned.)_"
+                            raw = result.stdout.strip()
+                            if raw:
+                                try:
+                                    data = json.loads(raw)
+                                    response = (
+                                        data.get("last_message")
+                                        or raw
+                                    )
+                                except (json.JSONDecodeError, AttributeError):
+                                    response = raw
+                            elif result.stderr.strip():
+                                response = result.stderr.strip()
+
+                            st.session_state[chat_key].append(
+                                {"role": "assistant", "content": response}
+                            )
+
+                            st.rerun()
 
     except (json.JSONDecodeError, KeyError, IndexError) as exc:
         st.error(f"Could not parse SARIF report: {exc}")

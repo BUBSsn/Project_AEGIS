@@ -2,7 +2,11 @@ import subprocess
 import json
 import os
 import sys
+from pathlib import Path
 from typing import Dict, Any
+
+# Ensure project root is importable when run as __main__ or via MCP subprocess.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 
 def rollback_target(file_path: str = "src/sample_service.py") -> bool:
@@ -45,7 +49,8 @@ def run_test_verification(test_directory: str = "tests") -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    result = run_test_verification()
+    _test_dir = sys.argv[1] if len(sys.argv) > 1 else "tests"
+    result = run_test_verification(_test_dir)
     print(f"Critic Verification Verdict: {result['status']}")
     if result["status"] != "PASSED":
         print(result["combined_output"])

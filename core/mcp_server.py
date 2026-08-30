@@ -42,7 +42,8 @@ def scan_ast_vulnerabilities(
 def run_critic_test_verification(test_dir: str = "tests") -> str:
     """Runs the pytest test suite with full stdout and stderr diagnostics."""
     engine = PROJECT_ROOT / "core" / "critic_engine.py"
-    cmd = [sys.executable, str(engine)]
+    # Forward test_dir so callers can scope the run to a specific sub-suite.
+    cmd = [sys.executable, str(engine), test_dir]
     proc = subprocess.run(cmd, capture_output=True, text=True, cwd=str(PROJECT_ROOT))
 
     if proc.returncode == 0:

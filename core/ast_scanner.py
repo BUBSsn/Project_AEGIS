@@ -2,6 +2,7 @@ import ast
 import os
 import sys
 import math
+from collections import Counter
 from pathlib import Path
 from typing import List, Dict, Any, Set
 
@@ -27,14 +28,19 @@ except ImportError:  # pragma: no cover
 
 
 def calculate_shannon_entropy(data: str) -> float:
-    """Calculates Shannon Entropy to detect high-entropy random strings/keys."""
+    """Calculate Shannon entropy of *data* in O(n) time.
+
+    Uses ``collections.Counter`` to tally character frequencies in a single
+    pass instead of calling ``str.count()`` per unique character (which was
+    O(n × |alphabet|)).
+    """
     if not data:
         return 0.0
+    length = len(data)
     entropy = 0.0
-    for x in set(data):
-        p_x = float(data.count(x)) / len(data)
-        if p_x > 0:
-            entropy += -p_x * math.log2(p_x)
+    for count in Counter(data).values():
+        p_x = count / length
+        entropy -= p_x * math.log2(p_x)
     return entropy
 
 

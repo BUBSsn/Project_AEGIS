@@ -512,7 +512,7 @@ from typing import Optional, Dict, Any
 
 # VULNERABILITY 1: Hardcoded credential (CWE-798)
 # Intentionally a long, high-entropy string to exercise the entropy-based scanner
-JWT_SECRET_KEY = "d9a8f4c2e1b7489a8c0f5e4b2a1d9e8f7c6a3b1"
+JWT_SECRET_KEY = "<REDACTED — intentional CWE-798 vulnerability for scanner demonstration>"
 DATABASE_PATH = "users.db"
 
 

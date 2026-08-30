@@ -290,7 +290,9 @@ def _metric_card(col, label: str, value: str, sub: str = "") -> None:
 
 vuln_count = 0
 sarif_ready = False
-if _active_sarif_path.exists():
+# Only read SARIF if there is an active session — avoids showing stale legacy
+# data when all sessions have been cleared.
+if _active_session is not None and _active_sarif_path.exists():
     try:
         sarif = json.loads(_active_sarif_path.read_text(encoding="utf-8"))
         results = sarif.get("runs", [{}])[0].get("results", [])
@@ -672,7 +674,7 @@ if not _active_sarif_path.exists():
             _sk_bar(18, w)
             st.markdown("")
 
-elif _active_sarif_path.exists():
+elif _active_session is not None and _active_sarif_path.exists():
     st.subheader("Security Findings")
     try:
         sarif = json.loads(_active_sarif_path.read_text())

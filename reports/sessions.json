@@ -1,20 +1,20 @@
 [
   {
-    "session_id": "526846fa-4cb3-4ebc-a895-4df0b3c1930b",
-    "repo_url": "https://github.com/jhundeniel/Arithmetic_Heroes",
-    "repo_name": "Arithmetic_Heroes",
-    "clone_dir": "workspaces/526846fa-4cb3-4ebc-a895-4df0b3c1930b",
-    "sarif_path": "reports/sessions/526846fa-4cb3-4ebc-a895-4df0b3c1930b.sarif",
-    "timestamp": "2026-08-29T20:56:43.125015+00:00",
-    "finding_count": 114
+    "session_id": "8d1b9498-427a-48aa-bf76-fcb1aae5eabe",
+    "repo_url": "https://github.com/juice-shop/juice-shop",
+    "repo_name": "juice-shop",
+    "clone_dir": "workspaces/8d1b9498-427a-48aa-bf76-fcb1aae5eabe",
+    "sarif_path": "reports/sessions/8d1b9498-427a-48aa-bf76-fcb1aae5eabe.sarif",
+    "timestamp": "2026-08-30T12:40:46.910110+00:00",
+    "finding_count": 202
   },
   {
-    "session_id": "ccbc3fc6-b0b4-4156-9920-ac9686d51fb5",
-    "repo_url": "https://github.com/juice-shop/juice-shop.git",
-    "repo_name": "juice-shop.git",
-    "clone_dir": "workspaces/ccbc3fc6-b0b4-4156-9920-ac9686d51fb5",
-    "sarif_path": "reports/sessions/ccbc3fc6-b0b4-4156-9920-ac9686d51fb5.sarif",
-    "timestamp": "2026-08-29T20:58:29.322436+00:00",
+    "session_id": "490de6e1-4074-41a4-8ce0-0981781706bc",
+    "repo_url": "https://github.com/juice-shop/juice-shop",
+    "repo_name": "juice-shop",
+    "clone_dir": "workspaces/490de6e1-4074-41a4-8ce0-0981781706bc",
+    "sarif_path": "reports/sessions/490de6e1-4074-41a4-8ce0-0981781706bc.sarif",
+    "timestamp": "2026-08-30T12:46:57.291162+00:00",
     "finding_count": 202
   }
 ]
